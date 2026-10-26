@@ -1,0 +1,16 @@
+{
+  "name": "sistem-rental-mobil-rodakita",
+  "version": "1.1.0",
+  "description": "Sistem Informasi Penyewaan Mobil Berbasis Web (Versi 1.1)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^11.8.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.7.1",
+    "express-session": "^1.19.0"
+  }
+}

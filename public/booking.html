@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RodaKita Rental - Sewa Mobil Online</title>
+<style>
+:root{--bg:#F4F7F9;--sf:#fff;--sf2:#EAF0F3;--ink:#1B2A38;--mute:#5B6B78;--line:#D8E1E8;--pri:#0E7C86;--onpri:#fff;--tint:#DDF0F1;--acc:#F5A623;--onacc:#1B1B1B;--ob:#D9F0E0;--ot:#1E6B3A;--wb:#FBEBC8;--wt:#7A5200;--bb:#F8DCDA;--bt:#8E2B25;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F171B;--sf:#17232A;--sf2:#202F37;--ink:#E6EEF2;--mute:#9BAEB8;--line:#2B3C45;--pri:#3FB8C2;--onpri:#06222A;--tint:#17393E;--ob:#1C4029;--ot:#8FDBA6;--wb:#4A3A12;--wt:#F5CE73;--bb:#4A2220;--bt:#F0A7A2;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F171B;--sf:#17232A;--sf2:#202F37;--ink:#E6EEF2;--mute:#9BAEB8;--line:#2B3C45;--pri:#3FB8C2;--onpri:#06222A;--tint:#17393E;--ob:#1C4029;--ot:#8FDBA6;--wb:#4A3A12;--wt:#F5CE73;--bb:#4A2220;--bt:#F0A7A2;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:14px 24px;background:#0B2A4A;color:#fff}
+.brand{font-size:20px;font-weight:700;letter-spacing:-.02em}.brand span{color:var(--acc)}
+.top nav{display:flex;gap:18px;font-size:14px}.top a{color:#D3E2EE;text-decoration:none}.top a:hover{color:#fff}
+.hero{background:linear-gradient(135deg,#0B2A4A 0%,#0E7C86 100%);color:#fff;padding:36px 24px 44px}
+.in{max-width:1000px;margin:0 auto}
+.hero h1{margin:0 0 6px;font-size:clamp(24px,4vw,34px);letter-spacing:-.02em;line-height:1.2}
+.hero p{margin:0 0 20px;opacity:.9}
+.sf{background:var(--sf);color:var(--ink);border-radius:14px;padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;align-items:end;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute)}
+.fld input,.fld select,.fld textarea{border:1px solid var(--line);background:var(--sf);color:var(--ink);border-radius:8px;padding:9px 10px;min-width:0}
+.btn{border:1px solid var(--line);background:var(--sf);border-radius:8px;padding:9px 16px;cursor:pointer;font-size:15px}
+.btn:hover{filter:brightness(.96)}
+.btn.p{background:var(--pri);color:var(--onpri);border-color:var(--pri);font-weight:600}
+.btn.a{background:linear-gradient(135deg,#F5A623,#F28C28);color:var(--onacc);border-color:#F28C28;font-weight:700}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.err{color:var(--bt);font-size:14px;margin:8px 0 0;min-height:1.4em}
+.hero .err{color:#FFD7D3}
+section.s{padding:28px 24px}
+h2{margin:0 0 14px;font-size:21px;letter-spacing:-.01em}
+.cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.car{background:var(--sf);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.ph{height:96px;display:flex;align-items:flex-end;padding:10px 12px;color:#fff;font-weight:700;background:linear-gradient(135deg,#0B2A4A,#2BB5B8)}
+.car:nth-child(2) .ph{background:linear-gradient(135deg,#12356B,#2A62B8)}.car:nth-child(3) .ph{background:linear-gradient(135deg,#0E7C86,#7CD0C8)}.car:nth-child(4) .ph{background:linear-gradient(135deg,#243B53,#627D98)}
+.cb{padding:12px;display:flex;flex-direction:column;gap:3px;flex:1}
+.cb small{color:var(--mute)}.tot{font-size:19px;font-weight:700}
+.cb .btn{margin-top:auto}
+.bd{font-size:12px;padding:2px 9px;border-radius:999px;background:var(--sf2);color:var(--mute);white-space:nowrap}
+.bd.ok{background:var(--ob);color:var(--ot)}.bd.wn{background:var(--wb);color:var(--wt)}
+.card{background:var(--sf);border:1px solid var(--line);border-radius:14px;padding:20px}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.st{font-size:13px;padding:5px 14px;border-radius:999px;background:var(--sf2);color:var(--mute)}
+.st.on{background:var(--pri);color:var(--onpri);font-weight:600}.st.dn{background:var(--tint);color:var(--ink)}
+.row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row span:first-child{color:var(--mute)}
+.frm{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.act{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.opt{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;margin-bottom:8px}
+.opt:has(input:checked){border-color:var(--pri);background:var(--tint)}
+.pay{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+.qr{display:grid;grid-template-columns:repeat(21,7px);padding:8px;background:#fff;border-radius:8px;width:max-content}
+.qr i{width:7px;height:7px;background:#fff}.qr i.k{background:#111}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.how .card b{display:inline-flex;width:28px;height:28px;border-radius:50%;background:var(--pri);color:var(--onpri);align-items:center;justify-content:center;margin-bottom:8px}
+.how p{margin:0;color:var(--mute);font-size:14px}
+.tl{list-style:none;margin:14px 0;padding:0}
+.tl li{display:flex;gap:10px;align-items:center;padding:5px 0;color:var(--mute);font-size:14px}
+.tl li::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--sf2);border:2px solid var(--line);flex:none}
+.tl li.d{color:var(--ink)}.tl li.d::before{background:var(--pri);border-color:var(--pri)}
+.tl li.c{color:var(--ink);font-weight:600}.tl li.c::before{background:var(--acc);border-color:var(--acc)}
+.note{font-size:13px;color:var(--mute)}
+.demo{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:13px;color:var(--mute)}
+.ok-box{background:var(--ob);color:var(--ot);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+footer{padding:22px 24px;text-align:center;color:var(--mute);font-size:13px}
+@media (max-width:600px){.top{padding:12px 16px}.hero,section.s{padding-left:16px;padding-right:16px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">Roda<span>Kita</span> Rental</div><nav aria-label="Menu"><a href="#cari">Cari mobil</a><a href="#cara">Cara pesan</a><a href="#lacak">Lacak booking</a></nav></header>
+<div class="hero" id="cari"><div class="in"><h1>Sewa mobil mudah, bayar langsung pakai QRIS</h1><p>Pilih tanggal, lihat mobil yang tersedia, lalu booking tanpa perlu login.</p>
+<form class="sf" id="sf" novalidate><label class="fld">Tanggal ambil<input type="date" id="d1"></label><label class="fld">Tanggal kembali<input type="date" id="d2"></label><label class="fld">Jenis sewa<select id="drv"><option value="0">Lepas kunci</option><option value="1">Dengan sopir</option></select></label><button class="btn a" type="submit">Cek ketersediaan</button></form><p class="err" id="err" role="alert"></p></div></div>
+<main class="in">
+<section class="s" id="hasil" hidden></section>
+<section class="s" id="wz" hidden></section>
+<section class="s" id="cara"><h2>Cara pesan</h2><div class="how"><div class="card"><b>1</b><br><strong>Pilih mobil</strong><p>Masukkan tanggal sewa, lihat mobil yang tersedia beserta total harganya.</p></div><div class="card"><b>2</b><br><strong>Isi data dan bayar</strong><p>Bayar DP 50% atau langsung lunas lewat QRIS. Kode booking dikirim ke WhatsApp.</p></div><div class="card"><b>3</b><br><strong>Ambil mobil</strong><p>Tim kami mengonfirmasi booking. Lunasi sisa pembayaran sebelum pengambilan.</p></div></div></section>
+<section class="s" id="lacak"><h2>Lacak booking</h2><div class="card"><form class="frm" id="tf" novalidate><label class="fld">Kode booking<input id="tk" placeholder="BK-0142" autocomplete="off"></label><label class="fld">No. WhatsApp<input id="th" type="tel" placeholder="081234560005" autocomplete="off"></label><div style="align-self:end"><button class="btn p" type="submit">Cek status</button></div></form><p class="err" id="te" role="alert"></p><p class="note">Untuk mencoba: kode BK-0142 dengan nomor 081234560005.</p><div id="tr"></div></div></section>
+</main>
+<footer>RodaKita Rental. Prototipe dengan data contoh, pembayaran QRIS hanya simulasi.</footer>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rp=n=>'Rp'+Math.round(n).toLocaleString('id-ID');
+const T0=new Date();T0.setHours(0,0,0,0);
+const add=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const dt=o=>add(T0,o).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+const CARS=[{n:'Toyota Avanza',s:'7 kursi, manual, AC',p:350000,b:[[9,11]]},{n:'Innova Zenix',s:'7 kursi, matic, AC',p:750000,b:[[12,14]]},{n:'Honda Brio',s:'5 kursi, matic, AC',p:300000,b:[[6,7]]},{n:'Daihatsu Sigra',s:'7 kursi, manual, AC',p:280000,b:[]}];
+const FEE=150000,STAT=['Menunggu pembayaran','Pembayaran diterima','Dikonfirmasi staff','Siap diambil','Sedang berjalan','Selesai'];
+const BK=[{id:'BK-0142',nama:'Andi Pratama',hp:'081234560005',car:0,s:5,e:8,drv:true,total:1500000,paid:750000,st:2},{id:'BK-0141',nama:'Fajar Nugroho',hp:'081234560004',car:2,s:2,e:4,drv:false,total:600000,paid:600000,st:3}];
+let W={},tm;
+$('#d1').value=add(T0,5).toISOString().slice(0,10);$('#d2').value=add(T0,8).toISOString().slice(0,10);
+function qrCells(seed){let x=seed,c='';for(let r=0;r<21;r++)for(let k=0;k<21;k++){const f=(r<7&&(k<7||k>13))||(r>13&&k<7);let on;if(f){const a=r%14%7,b=k%14%7;on=a==0||a==6||b==0||b==6||(a>1&&a<5&&b>1&&b<5)}else{x=(x*1103515245+12345)&0x7fffffff;on=(x>>16)&1}c+=`<i class="${on?'k':''}"></i>`}return c}
+function payPanel(el,amt,label,done){
+let sec=1800;clearInterval(tm);
+el.innerHTML=`<div class="pay"><div><div class="qr">${qrCells(Math.floor(amt)%9973+7)}</div><small class="note" style="display:block">QRIS contoh, bukan kode asli</small></div><div style="flex:1;min-width:220px"><div class="row"><span>${label}</span><b>${rp(amt)}</b></div><div class="row"><span>Batas waktu bayar</span><span class="cd">30:00</span></div><p class="note">Buka aplikasi e-wallet atau m-banking, pilih bayar dengan QRIS, lalu scan kode ini.</p><button class="btn p simbtn" type="button">Simulasikan pembayaran berhasil</button><p class="pm" role="status"></p></div></div>`;
+tm=setInterval(()=>{const c=el.querySelector('.cd');if(!c){clearInterval(tm);return}sec--;c.textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');if(sec<=0){clearInterval(tm);el.querySelector('.pm').textContent='Waktu bayar habis. Silakan buat booking ulang.';el.querySelector('.simbtn').disabled=true}},1000);
+el.querySelector('.simbtn').onclick=()=>{clearInterval(tm);done()}}
+function search(){
+const d1=new Date($('#d1').value),d2=new Date($('#d2').value),e=$('#err');d1.setHours(0,0,0,0);d2.setHours(0,0,0,0);
+if(isNaN(d1)||isNaN(d2)){e.textContent='Isi tanggal ambil dan tanggal kembali.';return}
+if(d1<T0){e.textContent='Pilih tanggal mulai dari hari ini.';return}
+if(d2<=d1){e.textContent='Tanggal kembali harus setelah tanggal ambil.';return}
+e.textContent='';const n=Math.round((d2-d1)/864e5),drv=$('#drv').value==='1',s=Math.round((d1-T0)/864e5),en=s+n;
+W={s,e:en,n,drv};
+const ok=CARS.map((c,i)=>({c,i})).filter(({c})=>!c.b.some(([a,b])=>s<=b&&en>=a));
+const h=$('#hasil');h.hidden=false;$('#wz').hidden=true;
+h.innerHTML=`<h2>Mobil tersedia (${ok.length})</h2><p class="note">${dt(s)} sampai ${dt(en)} · ${n} hari · ${drv?'dengan sopir':'lepas kunci'}</p>`+(ok.length?`<div class="cars">${ok.map(({c,i})=>`<div class="car"><div class="ph">${c.n}</div><div class="cb"><small>${c.s}</small><span>${rp(c.p)}/hari${drv?' + sopir '+rp(FEE)+'/hari':''}</span><span class="tot">${rp(n*(c.p+(drv?FEE:0)))}</span><small>total ${n} hari</small><span><span class="bd ok">Tersedia</span></span><button class="btn a" data-act="pick" data-i="${i}" type="button" style="margin-top:10px">Booking</button></div></div>`).join('')}</div>`:'<p>Tidak ada mobil tersedia di tanggal ini. Coba ubah tanggal.</p>');
+h.scrollIntoView({behavior:'smooth',block:'start'})}
+function steps(k){return `<div class="steps">${['Ringkasan','Data diri','Pembayaran','Selesai'].map((t,i)=>`<span class="st ${i+1===k?'on':i+1<k?'dn':''}">${i+1}. ${t}</span>`).join('')}</div>`}
+function wz(h){const w=$('#wz');w.hidden=false;w.innerHTML=h;w.scrollIntoView({behavior:'smooth',block:'start'})}
+function sum(){const c=CARS[W.car];return `<div class="row"><span>Mobil</span><b>${c.n}</b></div><div class="row"><span>Periode</span><span>${dt(W.s)} - ${dt(W.e)} (${W.n} hari)</span></div><div class="row"><span>Jenis sewa</span><span>${W.drv?'Dengan sopir':'Lepas kunci'}</span></div><div class="row"><span>Total biaya</span><b>${rp(W.total)}</b></div>`}
+function step1(){const c=CARS[W.car];W.total=W.n*(c.p+(W.drv?FEE:0));wz(`<h2>Booking mobil</h2><div class="card">${steps(1)}${sum()}<div class="act"><button class="btn a" data-act="s2" type="button">Lanjut isi data diri</button><button class="btn" data-act="cancel" type="button">Pilih mobil lain</button></div></div>`)}
+function step2(){wz(`<h2>Booking mobil</h2><div class="card">${steps(2)}<form id="df" novalidate><div class="frm"><label class="fld">Nama lengkap<input id="nm" autocomplete="name" value="${esc(W.nama||'')}"></label><label class="fld">No. WhatsApp<input id="hp" type="tel" autocomplete="tel" value="${esc(W.hp||'')}"></label><label class="fld">Email (opsional)<input id="em" type="email" autocomplete="email"></label><label class="fld">Lokasi jemput<select id="lk"><option>Ambil di kantor</option><option>Antar ke alamat saya</option></select></label><label class="fld">Upload KTP/SIM (boleh saat pengambilan)<input id="fl" type="file" accept="image/*"></label><label class="fld">Catatan<textarea id="ct" rows="2"></textarea></label></div><label style="display:flex;gap:8px;margin-top:14px;font-size:14px"><input type="checkbox" id="sk"> Saya setuju dengan syarat dan ketentuan sewa.</label><p class="err" id="e2" role="alert"></p><div class="act" style="margin-top:6px"><button class="btn a" type="submit">Lanjut ke pembayaran</button><button class="btn" data-act="s1" type="button">Kembali</button></div></form></div>`)}
+function step3(){wz(`<h2>Booking mobil</h2><div class="card">${steps(3)}${sum()}<p style="margin:14px 0 8px"><b>Pilih pembayaran</b></p><label class="opt"><input type="radio" name="py" value="0.5" checked> <span><b>DP 50%: ${rp(W.total/2)}</b><br><small class="note">Sisa ${rp(W.total/2)} dilunasi sebelum pengambilan.</small></span></label><label class="opt"><input type="radio" name="py" value="1"> <span><b>Lunas: ${rp(W.total)}</b></span></label><div id="pp"><div class="act"><button class="btn a" data-act="qris" type="button">Bayar dengan QRIS</button><button class="btn" data-act="s2" type="button">Kembali</button></div></div></div>`)}
+function step4(b){const dp=b.paid<b.total;wz(`<h2>Booking berhasil</h2><div class="card">${steps(4)}<div class="ok-box"><b>Kode booking: ${b.id}</b><br>${dp?'DP diterima.':'Pembayaran lunas.'} Konfirmasi dikirim lewat WhatsApp ke ${esc(b.hp)}.</div><div class="row"><span>Mobil</span><span>${CARS[b.car].n}</span></div><div class="row"><span>Periode</span><span>${dt(b.s)} - ${dt(b.e)}</span></div><div class="row"><span>Dibayar</span><b>${rp(b.paid)}</b></div>${dp?`<div class="row"><span>Sisa pelunasan</span><b>${rp(b.total-b.paid)}</b></div>`:''}<div class="demo"><b>Data yang masuk ke staff administrasi</b><br>Kode ${b.id} · ${esc(b.nama)} · ${esc(b.hp)} · ${CARS[b.car].n} · ${dt(b.s)}-${dt(b.e)} · ${b.drv?'dengan sopir':'lepas kunci'} · total ${rp(b.total)} · dibayar ${rp(b.paid)} · status ${dp?'DP diterima':'Lunas'}, menunggu konfirmasi ketersediaan.</div><div class="act"><button class="btn p" data-act="trk" data-id="${b.id}" type="button">Lacak booking ini</button></div></div>`)}
+function track(b){
+const dp=b.paid<b.total;
+$('#tr').innerHTML=`<div style="margin-top:16px"><div class="row"><span>${b.id} · ${esc(b.nama)}</span><b>${CARS[b.car].n}</b></div><div class="row"><span>Periode</span><span>${dt(b.s)} - ${dt(b.e)}</span></div><div class="row"><span>Pembayaran</span><span>${dp?`<span class="bd wn">DP ${rp(b.paid)}</span> sisa ${rp(b.total-b.paid)}`:'<span class="bd ok">Lunas</span>'}</span></div><ol class="tl">${STAT.map((t,i)=>`<li class="${i<b.st?'d':i===b.st?'c':''}">${t}</li>`).join('')}</ol>${dp?`<button class="btn a" data-act="lunasi" data-id="${b.id}" type="button">Lunasi sisa ${rp(b.total-b.paid)}</button><div id="lp"></div>`:''}<div class="demo">Demo: <button class="btn" data-act="adv" data-id="${b.id}" type="button" style="padding:4px 10px;font-size:13px">Majukan status (simulasi staff)</button><span id="am"></span></div></div>`;
+$('#tr').scrollIntoView({behavior:'smooth',block:'nearest'})}
+document.addEventListener('click',e=>{
+const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act,b=BK.find(x=>x.id===t.dataset.id);
+if(a==='pick'){W.car=+t.dataset.i;step1()}
+else if(a==='s1')step1();else if(a==='s2')step2();
+else if(a==='cancel')$('#wz').hidden=true;
+else if(a==='qris'){W.py=+document.querySelector('input[name=py]:checked').value;const amt=W.total*W.py;
+payPanel($('#pp'),amt,W.py<1?'DP 50%':'Pelunasan',()=>{const id='BK-0'+(150+BK.length);const nb={id,nama:W.nama,hp:W.hp,car:W.car,s:W.s,e:W.e,drv:W.drv,total:W.total,paid:amt,st:1};BK.push(nb);step4(nb)})}
+else if(a==='trk'){$('#tk').value=b.id;$('#th').value=b.hp;$('#lacak').scrollIntoView({behavior:'smooth'});track(b)}
+else if(a==='lunasi'){payPanel($('#lp'),b.total-b.paid,'Sisa pelunasan',()=>{b.paid=b.total;track(b)})}
+else if(a==='adv'){if(b.st===2&&b.paid<b.total){$('#am').textContent=' Lunasi sisa pembayaran dulu sebelum status Siap diambil.';return}if(b.st<5)b.st++;track(b)}});
+document.addEventListener('submit',e=>{e.preventDefault();const f=e.target.id;
+if(f==='sf')search();
+else if(f==='df'){const nm=$('#nm').value.trim(),hp=$('#hp').value.replace(/\D/g,''),er=$('#e2');
+if(!nm){er.textContent='Isi nama lengkap.';return}
+if(hp.length<9||hp[0]!=='0'){er.textContent='Isi nomor WhatsApp yang valid, diawali 0.';return}
+if(!$('#sk').checked){er.textContent='Centang persetujuan syarat dan ketentuan.';return}
+W.nama=nm;W.hp=hp;step3()}
+else if(f==='tf'){const k=$('#tk').value.trim().toUpperCase(),h=$('#th').value.replace(/\D/g,''),er=$('#te');
+const b=BK.find(x=>x.id===k&&x.hp===h);
+if(!b){er.textContent='Kode booking dan nomor WhatsApp tidak cocok.';$('#tr').innerHTML='';return}
+er.textContent='';track(b)}});
+</script>
+</body>
+</html>

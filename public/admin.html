@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Internal Rental Mobil - RodaKita</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --secondary: #0f172a;
+      --sidebar-bg: #1e293b;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      font-size: 13px;
+    }
+
+    /* Login Screen Layout */
+    .login-container {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    }
+    .login-card {
+      background: white;
+      border-radius: 16px;
+      padding: 36px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2);
+    }
+    .quick-roles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--border);
+    }
+    .btn-quick-role {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .btn-quick-role:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
+
+    /* Dashboard Layout */
+    #dashboardApp {
+      display: none;
+      width: 100%;
+      min-height: 100vh;
+    }
+    aside.sidebar {
+      width: 250px;
+      background: var(--sidebar-bg);
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .sidebar-brand {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .sidebar-brand span { color: #38bdf8; }
+    .sidebar-menu {
+      list-style: none;
+      padding: 14px 10px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .sidebar-menu li { margin-bottom: 3px; }
+    .sidebar-menu button {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-align: left;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+    .sidebar-menu button:hover, .sidebar-menu button.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    .sidebar-menu button.active {
+      background: var(--primary);
+    }
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+    }
+
+    /* Main Workspace */
+    main.workspace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow-x: hidden;
+    }
+    header.topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .role-badge {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .role-admin { background: #fef08a; color: #854d0e; }
+    .role-staff { background: #dbeafe; color: #1e40af; }
+    .role-akuntansi { background: #dcfce7; color: #166534; }
+    .role-owner { background: #f3e8ff; color: #6b21a8; }
+
+    .content-area {
+      padding: 24px;
+      flex: 1;
+      max-width: 1400px;
+    }
+
+    /* Tab Panes */
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* UI Components */
+    .grid-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .stat-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+
+    /* Tables */
+    .table-responsive {
+      overflow-x: auto;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    table.data-table th {
+      background: #f8fafc;
+      color: var(--text-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    table.data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      vertical-align: middle;
+    }
+    table.data-table tr:hover { background: #f8fafc; }
+
+    /* Badges */
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+    .bg-menunggu_pemeriksaan { background: #fef3c7; color: #b45309; }
+    .bg-menunggu_persetujuan { background: #e0f2fe; color: #0369a1; }
+    .bg-terkonfirmasi { background: #dcfce7; color: #15803d; }
+    .bg-berjalan { background: #ede9fe; color: #6d28d9; }
+    .bg-selesai { background: #f1f5f9; color: #475569; }
+    .bg-ditolak { background: #fee2e2; color: #b91c1c; }
+    .bg-kedaluwarsa { background: #f3f4f6; color: #6b7280; }
+    .bg-dibatalkan { background: #fecdd3; color: #be123c; }
+
+    /* Buttons */
+    .btn {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 7px 12px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .btn-sm { padding: 4px 8px; font-size: 11px; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-outline { background: white; border-color: var(--border); color: var(--text); }
+    .btn-outline:hover { background: #f8fafc; }
+    .btn-wa { background: #25d366; color: white; }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal-dialog {
+      background: white;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+    .form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .form-control {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      aside.sidebar { display: none; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. LOGIN SCREEN -->
+  <div id="loginScreen" class="login-container">
+    <div class="login-card">
+      <div style="text-align:center; margin-bottom:20px;">
+        <div style="width:44px; height:44px; background:var(--primary); color:white; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:22px; margin-bottom:10px;">R</div>
+        <h2 style="font-size:20px; font-weight:800; color:var(--secondary);">Login Dashboard Internal</h2>
+        <p style="color:var(--text-muted); font-size:12px;">Sistem Informasi Rental Mobil RodaKita (v1.1)</p>
+      </div>
+
+      <form id="formLogin" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="loginUsername" class="form-control" required placeholder="admin / staff / akuntansi / owner">
+        </div>
+        <div class="form-group" style="margin-bottom:16px;">
+          <label>Password</label>
+          <input type="password" id="loginPassword" class="form-control" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:10px;">
+          Masuk ke Dashboard
+        </button>
+      </form>
+
+      <!-- Quick Role Switcher for instant demo/testing -->
+      <div class="quick-roles">
+        <button class="btn-quick-role" onclick="quickFill('admin', 'admin123')">
+          👑 Admin<br><span style="font-weight:normal; color:#64748b;">Akses Penuh</span>
+        </button>
+        <button class="btn-quick-role" onclick="quickFill('staff', 'staff123')">
+          📋 Staff<br><span style="font-weight:normal; color:#64748b;">Operasional & Armada</span>
+        </button>
+        <button class="btn-quick-role" onclick="quickFill('akuntansi', 'akuntansi123')">
+          💰 Akuntansi<br><span style="font-weight:normal; color:#64748b;">Verifikasi & Kas</span>
+        </button>
+        <button class="btn-quick-role" onclick="quickFill('owner', 'owner123')">
+          📊 Owner<br><span style="font-weight:normal; color:#64748b;">Statistik & Laporan</span>
+        </button>
+      </div>
+
+      <div style="text-align:center; margin-top:16px;">
+        <a href="/" style="color:var(--text-muted); font-size:12px; text-decoration:none;">&larr; Kembali ke Website Publik</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. DASHBOARD WORKSPACE -->
+  <div id="dashboardApp">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div style="width:28px; height:28px; background:var(--primary); color:white; border-radius:6px; display:flex; align-items:center; justify-content:center;">R</div>
+        <span>RodaKita</span> Admin
+      </div>
+      <ul class="sidebar-menu" id="sidebarMenu">
+        <!-- Rendered dynamically by user role -->
+      </ul>
+      <div class="sidebar-footer">
+        <div id="sidebarUserLabel" style="color:white; font-weight:700; margin-bottom:2px;">User</div>
+        <div id="sidebarRoleLabel" style="font-size:11px;">Role</div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <h1 id="topbarTitle" style="font-size:18px; font-weight:800; color:var(--secondary);">Ringkasan Dashboard</h1>
+          <span id="topbarBadgeRole" class="role-badge role-admin">Admin</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <!-- Quick switch role for effortless testing -->
+          <select id="selectDemoRole" class="form-control" style="font-size:11px; padding:4px 8px;" onchange="switchRoleDemo(this.value)">
+            <option value="admin">Switch Demo: Admin</option>
+            <option value="staff">Switch Demo: Staff</option>
+            <option value="akuntansi">Switch Demo: Akuntansi</option>
+            <option value="owner">Switch Demo: Owner</option>
+          </select>
+          <a href="/" target="_blank" class="btn btn-outline btn-sm">Buka Web Publik ↗</a>
+          <button onclick="handleLogout()" class="btn btn-outline btn-sm" style="color:var(--danger); border-color:#fee2e2;">Logout</button>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="content-area">
+
+        <!-- TAB 1: STATISTIK & LAPORAN EKSEKUTIF (Owner, Admin, Akuntansi) -->
+        <section id="tab-stats" class="tab-pane active">
+          <!-- 6 Ukuran Laporan Bab VI -->
+          <div class="grid-stats">
+            <div class="stat-box">
+              <div class="stat-label">Total Pendapatan Terverifikasi</div>
+              <div class="stat-val" id="statRevenue" style="color:var(--success);">Rp 0</div>
+              <div class="stat-sub">Pembayaran sah yang diverifikasi Akuntansi</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Margin Keuntungan</div>
+              <div class="stat-val" id="statMargin">0%</div>
+              <div class="stat-sub" id="statMarginSub">(Pemasukan - Pengeluaran)</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Tingkat Konversi Order</div>
+              <div class="stat-val" id="statConversion">0%</div>
+              <div class="stat-sub" id="statConversionSub">Order terkonfirmasi vs masuk</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Utilisasi Armada</div>
+              <div class="stat-val" id="statUtilitas">0%</div>
+              <div class="stat-sub" id="statUtilitasSub">Mobil berstatus disewa</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Keterlambatan Pengembalian</div>
+              <div class="stat-val" id="statLate">0 Kejadian</div>
+              <div class="stat-sub" id="statLateSub">Rata-rata 0 jam terlambat</div>
+            </div>
+          </div>
+
+          <!-- Peringatan Pengingat Dokumen Armada (Alert Pajak/KIR < 30 Hari) -->
+          <div class="card" id="docWarningCard" style="display:none; border-left:4px solid var(--warning);">
+            <div class="card-header">
+              <div class="card-title" style="color:var(--warning);">⚠️ Pengingat Dokumen Armada Jatuh Tempo (&lt; 30 Hari)</div>
+            </div>
+            <div id="docWarningList"></div>
+          </div>
+
+          <!-- Pendapatan per Mobil -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Pendapatan per Unit Mobil (Bab VI Proposal)</div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nama Mobil</th>
+                    <th>Nomor Polisi</th>
+                    <th>Total Pendapatan Sah</th>
+                  </tr>
+                </thead>
+                <tbody id="tableRevenueCar"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: MANAJEMEN PEMESANAN / ORDER (Admin & Staff) -->
+        <section id="tab-orders" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Daftar Pemesanan Sewa Mobil</div>
+              <div style="display:flex; gap:10px;">
+                <select id="filterOrderStatus" class="form-control" onchange="loadOrders()">
+                  <option value="semua">Semua Status</option>
+                  <option value="menunggu_pemeriksaan">Menunggu Pemeriksaan</option>
+                  <option value="menunggu_persetujuan">Menunggu Persetujuan / DP</option>
+                  <option value="terkonfirmasi">Terkonfirmasi</option>
+                  <option value="berjalan">Berjalan</option>
+                  <option value="selesai">Selesai</option>
+                  <option value="ditolak">Ditolak</option>
+                  <option value="kedaluwarsa">Kedaluwarsa</option>
+                  <option value="dibatalkan">Dibatalkan</option>
+                </select>
+                <button onclick="loadOrders()" class="btn btn-outline btn-sm">Refresh</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Kode / Tgl</th>
+                    <th>Pelanggan</th>
+                    <th>Mobil & Sopir</th>
+                    <th>Jadwal Sewa</th>
+                    <th>Total Biaya</th>
+                    <th>Status</th>
+                    <th>Aksi Operasional</th>
+                  </tr>
+                </thead>
+                <tbody id="tableOrdersBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: ARMADA & DOKUMEN KENDARAAN (Admin & Staff) -->
+        <section id="tab-cars" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Daftar Armada Kendaraan</div>
+              <button id="btnTambahMobil" class="btn btn-primary btn-sm" onclick="openAddCarModal()">+ Tambah Mobil</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nama Kendaraan</th>
+                    <th>Kategori</th>
+                    <th>No. Polisi</th>
+                    <th>Transmisi / Kapasitas</th>
+                    <th>Tarif / Hari</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tableCarsBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Dokumen Kendaraan (KIR, Pajak, Asuransi, Servis) -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Monitoring Dokumen & Servis Kendaraan (Bab V & VI)</div>
+              <button class="btn btn-outline btn-sm" onclick="openAddDocModal()">+ Tambah Pengingat Dokumen</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Mobil</th>
+                    <th>Jenis Dokumen</th>
+                    <th>Nomor Dokumen</th>
+                    <th>Tanggal Jatuh Tempo</th>
+                    <th>Sisa Hari</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tableDocsBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 4: SOPIR & PENJADWALAN (Admin & Staff) -->
+        <section id="tab-drivers" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Data Sopir Rental & Konfirmasi Bertoken</div>
+              <button class="btn btn-primary btn-sm" onclick="openAddDriverModal()">+ Tambah Sopir</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nama Sopir</th>
+                    <th>Nomor WhatsApp</th>
+                    <th>Tarif / Hari</th>
+                    <th>Status Ketersediaan</th>
+                  </tr>
+                </thead>
+                <tbody id="tableDriversBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 5: PENGEMBALIAN & CHECK-IN (Admin & Staff) -->
+        <section id="tab-returns" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Form Check-in Pengembalian Armada (Bab V)</div>
+            </div>
+            <form id="formReturnCar" onsubmit="handleReturnCar(event)" style="max-width:600px;">
+              <div class="form-group">
+                <label>Pilih Pemesanan Berstatus Berjalan</label>
+                <select id="returnOrderId" class="form-control" required onchange="calcPenaltyPreview()"></select>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <div class="form-group">
+                  <label>Tanggal Pengembalian Aktual</label>
+                  <input type="date" id="returnDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Odometer Akhir (KM)</label>
+                  <input type="number" id="returnOdo" class="form-control" required placeholder="Contoh: 45300">
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <div class="form-group">
+                  <label>Kondisi Bahan Bakar (BBM)</label>
+                  <select id="returnFuel" class="form-control">
+                    <option value="Full">Full (Penuh Sesuai Awal)</option>
+                    <option value="3/4">3/4 Tangki</option>
+                    <option value="1/2">1/2 Tangki</option>
+                    <option value="1/4">1/4 Tangki</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Jam Keterlambatan (Bila ada)</label>
+                  <input type="number" id="returnLateHours" class="form-control" value="0" min="0" oninput="calcPenaltyPreview()">
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <div class="form-group">
+                  <label>Denda Kerusakan Fisik (Rp)</label>
+                  <input type="number" id="returnDmgPenalty" class="form-control" value="0" min="0" oninput="calcPenaltyPreview()">
+                </div>
+                <div class="form-group">
+                  <label>Biaya BBM / Tambahan (Rp)</label>
+                  <input type="number" id="returnExtraFee" class="form-control" value="0" min="0" oninput="calcPenaltyPreview()">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Catatan Kondisi Fisik Armada</label>
+                <textarea id="returnNotes" class="form-control" rows="2" placeholder="Kondisi bodi, kebersihan interior, kelengkapan surat..."></textarea>
+              </div>
+              <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:14px; border:1px solid var(--border);">
+                Total Denda: <b id="previewTotalPenalty" style="color:var(--danger); font-size:16px;">Rp 0</b>
+              </div>
+              <button type="submit" class="btn btn-success">Simpan Check-in & Selesaikan Sewa</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- TAB 6: KEUANGAN & PEMBAYARAN (Akuntansi & Admin, Staff tandai bayar) -->
+        <section id="tab-finances" class="tab-pane">
+          <!-- Modul Pembayaran Sewa (Verifikasi DP / Pelunasan) -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Verifikasi Pembayaran Masuk (Bab II: Pemisahan Staff vs Akuntansi)</div>
+              <button class="btn btn-outline btn-sm" onclick="openMarkPaymentModal()">+ Tandai Pembayaran Diterima (Staff)</button>
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
+              Staff menandai tanda terima uang (status: <i>Diterima</i>), lalu hanya peran <b>Akuntansi</b> yang memverifikasi menjadi sah (status: <i>Terverifikasi</i>).
+            </p>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Order</th>
+                    <th>Jenis</th>
+                    <th>Nominal</th>
+                    <th>Metode</th>
+                    <th>Status</th>
+                    <th>Ditandai Oleh</th>
+                    <th>Diverifikasi Oleh</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tablePaymentsBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Modul Arus Kas & Biaya Perawatan -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Catatan Arus Kas & Biaya Perawatan Kendaraan</div>
+              <button id="btnCatatKas" class="btn btn-primary btn-sm" onclick="openAddCashModal()">+ Catat Kas Masuk / Keluar</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Jenis</th>
+                    <th>Kategori</th>
+                    <th>Nominal</th>
+                    <th>Keterangan</th>
+                    <th>Dicatat Oleh</th>
+                  </tr>
+                </thead>
+                <tbody id="tableCashBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 7: PENGGAJIAN / PAYROLL (Akuntansi & Admin, Staff slip sendiri) -->
+        <section id="tab-payroll" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Penggajian Sederhana (Payroll)</div>
+              <button id="btnBuatGaji" class="btn btn-primary btn-sm" onclick="openAddPayrollModal()">+ Buat Slip Gaji Baru</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Penerima</th>
+                    <th>Peran</th>
+                    <th>Periode</th>
+                    <th>Gaji Pokok</th>
+                    <th>Insentif / Bonus</th>
+                    <th>Potongan</th>
+                    <th>Total Diterima</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tablePayrollBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 8: CUSTOMER & BLACKLIST (Staff & Admin) -->
+        <section id="tab-customers" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Data Pelanggan Tetap & Daftar Hitam (Blacklist)</div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nama</th>
+                    <th>No. WhatsApp</th>
+                    <th>Email</th>
+                    <th>Total Sewa</th>
+                    <th>Status Blacklist</th>
+                    <th>Alasan</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tableCustomersBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 9: AUDIT LOG (Admin & Owner) -->
+        <section id="tab-audit" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Audit Trail (Pencatatan Aktivitas Penting Sistem)</div>
+              <button class="btn btn-outline btn-sm" onclick="loadAuditLogs()">Refresh Log</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Waktu</th>
+                    <th>Pengguna</th>
+                    <th>Role</th>
+                    <th>Tindakan</th>
+                    <th>Tabel</th>
+                    <th>Detail / Perubahan</th>
+                  </tr>
+                </thead>
+                <tbody id="tableAuditBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 10: MANAJEMEN AKUN PENGGUNA (Khusus Admin) -->
+        <section id="tab-users" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Kelola Akun Pengguna Internal</div>
+              <button class="btn btn-primary btn-sm" onclick="openAddUserModal()">+ Tambah Pengguna</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Nama Lengkap</th>
+                    <th>Role</th>
+                    <th>Status Akun</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tableUsersBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: DETAIL ORDER & OPERASIONAL STATUS -->
+  <div id="modalOrderDetail" class="modal-overlay">
+    <div class="modal-dialog">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 id="modOrdTitle">Detail Pemesanan BK-XXXX</h3>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modalOrderDetail')">&times;</button>
+      </div>
+
+      <div id="modOrdContent" style="margin-bottom:20px;"></div>
+
+      <div style="border-top:1px solid var(--border); padding-top:16px;">
+        <h4 style="font-size:13px; margin-bottom:10px;">Perbarui Status Pemesanan</h4>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+          <button class="btn btn-outline btn-sm" onclick="updateOrderStatus('menunggu_persetujuan')">Ke Menunggu Persetujuan</button>
+          <button class="btn btn-success btn-sm" onclick="updateOrderStatus('terkonfirmasi')">Konfirmasi Order</button>
+          <button class="btn btn-primary btn-sm" onclick="updateOrderStatus('berjalan')">Mulai Sewa (Berjalan)</button>
+          <button class="btn btn-outline btn-sm" onclick="updateOrderStatus('selesai')">Selesai</button>
+          <button class="btn btn-danger btn-sm" onclick="updateOrderStatus('ditolak')">Tolak Order</button>
+        </div>
+
+        <h4 style="font-size:13px; margin-bottom:10px;">Cetak Dokumen Resmi (Bab VI)</h4>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-outline btn-sm" onclick="printDoc('invoice')">📄 Cetak Invoice</button>
+          <button class="btn btn-outline btn-sm" onclick="printDoc('kuitansi')">🧾 Cetak Kuitansi</button>
+          <button class="btn btn-outline btn-sm" onclick="printDoc('spk')">📜 Cetak Surat Perjanjian (SPK)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TUGASKAN SOPIR -->
+  <div id="modalAssignDriver" class="modal-overlay">
+    <div class="modal-dialog">
+      <h3 style="margin-bottom:12px;">Tugaskan Sopir & Buat Token WhatsApp</h3>
+      <form onsubmit="handleAssignDriver(event)">
+        <input type="hidden" id="assignOrderId">
+        <div class="form-group">
+          <label>Pilih Sopir Tersedia</label>
+          <select id="selectAssignDriver" class="form-control" required></select>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalAssignDriver')">Batal</button>
+          <button type="submit" class="btn btn-primary">Tugaskan & Buat Token</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: VERIFIKASI IDENTITAS -->
+  <div id="modalVerifyId" class="modal-overlay">
+    <div class="modal-dialog">
+      <h3 style="margin-bottom:12px;">Pemeriksaan Dokumen Identitas KTP / SIM</h3>
+      <form onsubmit="handleVerifyIdentity(event)">
+        <input type="hidden" id="verifOrderId">
+        <div class="form-group">
+          <label>Jenis Dokumen</label>
+          <select id="verifDocType" class="form-control">
+            <option value="KTP">KTP (Kartu Tanda Penduduk)</option>
+            <option value="SIM A">SIM A (Surat Izin Mengemudi)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nomor Dokumen</label>
+          <input type="text" id="verifDocNum" class="form-control" required placeholder="NIK / No SIM">
+        </div>
+        <div class="form-group">
+          <label>Hasil Pemeriksaan</label>
+          <select id="verifStatus" class="form-control">
+            <option value="valid">Valid (Sesuai Asli)</option>
+            <option value="tidak_valid">Tidak Valid / Ditolak</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Catatan Pemeriksaan</label>
+          <input type="text" id="verifNotes" class="form-control" placeholder="Contoh: Masa berlaku KTP seumur hidup, SIM aktif s/d 2028">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalVerifyId')">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Verifikasi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: TANDAI PEMBAYARAN DITERIMA (STAFF) -->
+  <div id="modalMarkPayment" class="modal-overlay">
+    <div class="modal-dialog">
+      <h3 style="margin-bottom:12px;">Tandai Pembayaran Diterima (Staff)</h3>
+      <form onsubmit="handleMarkPayment(event)">
+        <div class="form-group">
+          <label>Pilih Pemesanan</label>
+          <select id="payOrderId" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label>Jenis Pembayaran</label>
+          <select id="payType" class="form-control">
+            <option value="DP">Uang Muka (DP 50%)</option>
+            <option value="Pelunasan">Pelunasan</option>
+            <option value="Deposit">Deposit Jaminan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nominal Pembayaran (Rp)</label>
+          <input type="number" id="payAmount" class="form-control" required placeholder="Contoh: 500000">
+        </div>
+        <div class="form-group">
+          <label>Metode Pembayaran</label>
+          <select id="payMethod" class="form-control">
+            <option value="Transfer Bank BCA">Transfer Bank BCA</option>
+            <option value="Transfer Bank Mandiri">Transfer Bank Mandiri</option>
+            <option value="Tunai di Kantor">Tunai di Kantor</option>
+            <option value="QRIS">QRIS</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Catatan Bukti Transfer</label>
+          <input type="text" id="payNotes" class="form-control" placeholder="No referensi transfer / catatan">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalMarkPayment')">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Tanda Terima</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIKA UTAMA -->
+  <script>
+    let currentUser = null;
+    let currentSelectedOrderId = null;
+    let allOrdersData = [];
+
+    const formatRp = (n) => 'Rp ' + Math.round(n || 0).toLocaleString('id-ID');
+
+    // Auto-check auth saat dibuka
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
+        if (data && data.user) {
+          currentUser = data.user;
+          initDashboard();
+        } else {
+          showLoginScreen();
+        }
+      } catch (err) {
+        showLoginScreen();
+      }
+    });
+
+    function showLoginScreen() {
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('dashboardApp').style.display = 'none';
+    }
+
+    function quickFill(u, p) {
+      document.getElementById('loginUsername').value = u;
+      document.getElementById('loginPassword').value = p;
+      document.getElementById('formLogin').dispatchEvent(new Event('submit'));
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('loginUsername').value.trim();
+      const p = document.getElementById('loginPassword').value.trim();
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        });
+        const data = await res.json();
+        if (!res.ok) return alert(data.pesan || 'Login gagal.');
+
+        currentUser = data.user;
+        initDashboard();
+      } catch (err) {
+        alert('Terjadi kesalahan koneksi login.');
+      }
+    }
+
+    async function handleLogout() {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      currentUser = null;
+      showLoginScreen();
+    }
+
+    // Switch Role Demo secara instan
+    async function switchRoleDemo(role) {
+      const pwdMap = { admin: 'admin123', staff: 'staff123', akuntansi: 'akuntansi123', owner: 'owner123' };
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: role, password: pwdMap[role] })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        currentUser = data.user;
+        initDashboard();
+      }
+    }
+
+    // Inisialisasi Tampilan Berdasarkan Peran (RBAC)
+    function initDashboard() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboardApp').style.display = 'flex';
+
+      document.getElementById('sidebarUserLabel').textContent = currentUser.nama;
+      document.getElementById('sidebarRoleLabel').textContent = 'Peran: ' + currentUser.role.toUpperCase();
+      document.getElementById('topbarBadgeRole').textContent = currentUser.role.toUpperCase();
+      document.getElementById('topbarBadgeRole').className = 'role-badge role-' + currentUser.role;
+      document.getElementById('selectDemoRole').value = currentUser.role;
+
+      // Render menu sesuai peran Bab II Proposal
+      renderSidebarMenu();
+
+      // Pilih default tab sesuai peran
+      if (['owner', 'akuntansi'].includes(currentUser.role)) {
+        switchTab('stats');
+      } else {
+        switchTab('orders');
+      }
+    }
+
+    function renderSidebarMenu() {
+      const menu = document.getElementById('sidebarMenu');
+      menu.innerHTML = '';
+      const role = currentUser.role;
+
+      const items = [
+        { id: 'stats', label: '📊 Statistik & Laporan', roles: ['admin', 'owner', 'akuntansi'] },
+        { id: 'orders', label: '📑 Manajemen Booking', roles: ['admin', 'staff', 'owner', 'akuntansi'] },
+        { id: 'cars', label: '🚗 Armada & Dokumen', roles: ['admin', 'staff', 'owner'] },
+        { id: 'drivers', label: '👨‍✈️ Sopir & Penjadwalan', roles: ['admin', 'staff', 'owner'] },
+        { id: 'returns', label: '🔄 Pengembalian Mobil', roles: ['admin', 'staff'] },
+        { id: 'finances', label: '💵 Keuangan & Kas', roles: ['admin', 'akuntansi', 'staff', 'owner'] },
+        { id: 'payroll', label: '💼 Penggajian (Payroll)', roles: ['admin', 'akuntansi', 'staff', 'owner'] },
+        { id: 'customers', label: '👥 Customer & Blacklist', roles: ['admin', 'staff', 'owner'] },
+        { id: 'audit', label: '📝 Audit Trail (Log)', roles: ['admin', 'owner'] },
+        { id: 'users', label: '⚙️ Manajemen User', roles: ['admin'] }
+      ];
+
+      items.filter(it => it.roles.includes(role)).forEach(it => {
+        const li = document.createElement('li');
+        li.innerHTML = `<button onclick="switchTab('${it.id}')" id="btnMenu-${it.id}">${it.label}</button>`;
+        menu.appendChild(li);
+      });
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sidebar-menu button').forEach(b => b.classList.remove('active'));
+
+      const targetPane = document.getElementById(`tab-${tabId}`);
+      if (targetPane) targetPane.classList.add('active');
+
+      const btn = document.getElementById(`btnMenu-${tabId}`);
+      if (btn) btn.classList.add('active');
+
+      const titles = {
+        stats: 'Statistik Operasional & Laporan Keuangan',
+        orders: 'Pemeriksaan & Manajemen Pemesanan',
+        cars: 'Armada & Dokumen Kendaraan',
+        drivers: 'Data Sopir & Penjadwalan Tugas',
+        returns: 'Check-in Pengembalian Armada & Denda',
+        finances: 'Arus Kas & Verifikasi Pembayaran',
+        payroll: 'Penggajian & Slip Gaji',
+        customers: 'Pelanggan Tetap & Blacklist',
+        audit: 'Audit Log Perubahan Data',
+        users: 'Manajemen Akun Internal'
+      };
+      document.getElementById('topbarTitle').textContent = titles[tabId] || 'Dashboard';
+
+      // Load data spesifik tab
+      if (tabId === 'stats') loadStats();
+      if (tabId === 'orders') loadOrders();
+      if (tabId === 'cars') { loadCars(); loadDocs(); }
+      if (tabId === 'drivers') loadDrivers();
+      if (tabId === 'returns') prepareReturnForm();
+      if (tabId === 'finances') { loadPayments(); loadCash(); }
+      if (tabId === 'payroll') loadPayroll();
+      if (tabId === 'customers') loadCustomers();
+      if (tabId === 'audit') loadAuditLogs();
+      if (tabId === 'users') loadUsers();
+    }
+
+    // ==========================================
+    // 1. STATISTIK (BAB VI UKURAN LAPORAN)
+    // ==========================================
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/dashboard/stats');
+        const d = await res.json();
+
+        document.getElementById('statRevenue').textContent = formatRp(d.total_revenue);
+        document.getElementById('statMargin').textContent = `${d.margin_persen}%`;
+        document.getElementById('statMarginSub').textContent = `Laba: ${formatRp(d.laba_bersih)}`;
+        document.getElementById('statConversion').textContent = `${d.conversion_rate}%`;
+        document.getElementById('statConversionSub').textContent = `${d.confirmed_order} terkonfirmasi dari ${d.total_order} order`;
+        document.getElementById('statUtilitas').textContent = `${d.utilitas_persen}%`;
+        document.getElementById('statUtilitasSub').textContent = `${d.armada_disewa} disewa dari ${d.total_armada} unit`;
+        document.getElementById('statLate').textContent = `${d.insiden_terlambat} Kejadian`;
+        document.getElementById('statLateSub').textContent = `Rata-rata ${d.rata_jam_terlambat} jam`;
+
+        // Peringatan Dokumen
+        const docCard = document.getElementById('docWarningCard');
+        const docList = document.getElementById('docWarningList');
+        if (d.dokumen_warning && d.dokumen_warning.length > 0) {
+          docCard.style.display = 'block';
+          docList.innerHTML = d.dokumen_warning.map(w => `
+            <div style="font-size:12px; margin-bottom:6px; color:#92400e;">
+              • <b>${w.nama_mobil}</b> (${w.nomor_polisi}): <b>${w.jenis_dokumen}</b> jatuh tempo pada ${w.tanggal_berlaku} 
+              <span style="background:#fef3c7; padding:2px 6px; border-radius:4px; font-weight:700;">(${w.sisa_hari} hari lagi)</span>
+            </div>
+          `).join('');
+        } else {
+          docCard.style.display = 'none';
+        }
+
+        // Pendapatan per mobil
+        const tbody = document.getElementById('tableRevenueCar');
+        tbody.innerHTML = (d.revenue_per_mobil || []).map(m => `
+          <tr>
+            <td><b>${m.nama}</b></td>
+            <td><code>${m.nomor_polisi}</code></td>
+            <td style="color:var(--success); font-weight:700;">${formatRp(m.pendapatan)}</td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error('Stats error:', e);
+      }
+    }
+
+    // ==========================================
+    // 2. MANAJEMEN ORDER
+    // ==========================================
+    async function loadOrders() {
+      const status = document.getElementById('filterOrderStatus').value;
+      const tbody = document.getElementById('tableOrdersBody');
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Memuat data pemesanan...</td></tr>';
+
+      try {
+        const res = await fetch(`/api/orders?status=${status}`);
+        allOrdersData = await res.json();
+
+        if (allOrdersData.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">Tidak ada data pemesanan.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = allOrdersData.map(o => {
+          const waText = encodeURIComponent(
+            `Halo Bpk/Ibu ${o.nama_customer}, kami dari RodaKita Rental ingin mengonfirmasi pesanan ${o.kode_booking} untuk mobil ${o.nama_mobil}.`
+          );
+          const isStaffOrAdmin = ['admin', 'staff'].includes(currentUser.role);
+
+          return `
+            <tr>
+              <td>
+                <b>${o.kode_booking}</b><br>
+                <small style="color:var(--text-muted);">${o.created_at.slice(0,10)}</small>
+              </td>
+              <td>
+                <b>${o.nama_customer}</b> ${o.status_blacklist ? '<span class="status-badge bg-ditolak" style="font-size:10px;">BLACKLIST</span>' : ''}<br>
+                <small style="color:var(--text-muted);">${o.nomor_wa}</small>
+              </td>
+              <td>
+                <b>${o.nama_mobil}</b> (<code>${o.nomor_polisi}</code>)<br>
+                <small>${o.opsi_sopir ? 'Sopir: ' + (o.nama_sopir || '<span style="color:red;">Belum Ditugaskan</span>') : 'Lepas Kunci'}</small>
+              </td>
+              <td>
+                ${o.tanggal_mulai} s/d ${o.tanggal_selesai}<br>
+                <small style="color:var(--text-muted);">${o.durasi_hari} Hari</small>
+              </td>
+              <td>
+                <b>${formatRp(o.total_harga)}</b><br>
+                <small style="color:${o.total_bayar_verified >= o.total_harga ? 'var(--success)' : 'var(--warning)'};">
+                  Terbayar: ${formatRp(o.total_bayar_verified)}
+                </small>
+              </td>
+              <td>
+                <span class="status-badge bg-${o.status}">${o.status.replace('_', ' ')}</span>
+              </td>
+              <td>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                  <button class="btn btn-outline btn-sm" onclick="openOrderDetail(${o.id})">Detail</button>
+                  <a href="https://wa.me/62${o.nomor_wa.replace(/^0/,'')}?text=${waText}" target="_blank" class="btn btn-wa btn-sm">WA</a>
+                  ${isStaffOrAdmin && o.opsi_sopir && !o.sopir_id ? `
+                    <button class="btn btn-primary btn-sm" onclick="openAssignDriverModal(${o.id})">+ Sopir</button>
+                  ` : ''}
+                  ${isStaffOrAdmin ? `
+                    <button class="btn btn-outline btn-sm" onclick="openVerifyIdModal(${o.id})">KTP/SIM</button>
+                  ` : ''}
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Gagal memuat orders.</td></tr>';
+      }
+    }
+
+    // Detail Order Modal
+    async function openOrderDetail(orderId) {
+      currentSelectedOrderId = orderId;
+      try {
+        const res = await fetch(`/api/orders/${orderId}`);
+        const data = await res.json();
+        const o = data.order;
+
+        document.getElementById('modOrdTitle').textContent = `Detail Pemesanan ${o.kode_booking}`;
+        document.getElementById('modOrdContent').innerHTML = `
+          <div style="background:#f8fafc; padding:14px; border-radius:8px; margin-bottom:14px; font-size:12px; border:1px solid var(--border);">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+              <div>Pelanggan: <b>${o.nama_customer}</b></div>
+              <div>No. WA: <b>${o.nomor_wa}</b></div>
+              <div>Mobil: <b>${o.nama_mobil} (${o.nomor_polisi})</b></div>
+              <div>Jadwal: <b>${o.tanggal_mulai} s/d ${o.tanggal_selesai}</b></div>
+              <div>Sopir: <b>${o.opsi_sopir ? (o.nama_sopir || 'Belum dipilih') : 'Lepas Kunci'}</b></div>
+              <div>Status: <span class="status-badge bg-${o.status}"><b>${o.status}</b></span></div>
+              <div>Total Biaya: <b style="color:var(--primary);">${formatRp(o.total_harga)}</b></div>
+              <div>Tujuan: <b>${o.tujuan || '-'}</b></div>
+            </div>
+            ${o.catatan ? `<div style="margin-top:8px;">Catatan: <i>${o.catatan}</i></div>` : ''}
+          </div>
+
+          <h5 style="font-size:12px; font-weight:700; margin-bottom:6px;">Riwayat Status (Audit Trail Order)</h5>
+          <div style="font-size:11px; margin-bottom:14px; max-height:100px; overflow-y:auto;">
+            ${data.riwayat.map(r => `
+              <div style="padding:4px 0; border-bottom:1px dashed var(--border);">
+                • [${r.created_at.slice(11,16)}] <b>${r.status_lama || 'Start'} &rarr; ${r.status_baru}</b> oleh ${r.diubah_oleh} (${r.catatan || '-'})
+              </div>
+            `).join('')}
+          </div>
+
+          <h5 style="font-size:12px; font-weight:700; margin-bottom:6px;">Verifikasi Identitas KTP/SIM</h5>
+          <div style="font-size:11px; margin-bottom:14px;">
+            ${data.identitas.length ? data.identitas.map(i => `
+              <div>• ${i.jenis_dokumen} (${i.nomor_dokumen}): <b style="color:${i.status_verifikasi==='valid'?'green':'red'};">${i.status_verifikasi}</b> oleh ${i.diverifikasi_oleh || '-'}</div>
+            `).join('') : '<i style="color:#94a3b8;">Belum ada data identitas diperiksa.</i>'}
+          </div>
+        `;
+
+        openModal('modalOrderDetail');
+      } catch (err) {
+        alert('Gagal memuat detail pemesanan.');
+      }
+    }
+
+    // Ubah Status Order
+    async function updateOrderStatus(newStatus) {
+      if (!currentSelectedOrderId) return;
+      const reason = prompt(`Ubah status ke '${newStatus}'. Masukkan alasan/catatan:`, 'Pemeriksaan operasional oke');
+      if (reason === null) return;
+
+      try {
+        const res = await fetch(`/api/orders/${currentSelectedOrderId}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus, alasan: reason })
+        });
+        const data = await res.json();
+        alert(data.pesan);
+        closeModal('modalOrderDetail');
+        loadOrders();
+      } catch (err) {
+        alert('Gagal mengubah status.');
+      }
+    }
+
+    // Modal Tugaskan Sopir
+    async function openAssignDriverModal(orderId) {
+      document.getElementById('assignOrderId').value = orderId;
+      try {
+        const res = await fetch('/api/drivers');
+        const drivers = await res.json();
+        const sel = document.getElementById('selectAssignDriver');
+        sel.innerHTML = drivers.map(d => `<option value="${d.id}">${d.nama} (${d.status}) - WA: ${d.nomor_wa}</option>`).join('');
+        openModal('modalAssignDriver');
+      } catch (e) {
+        alert('Gagal mengambil data sopir.');
+      }
+    }
+
+    async function handleAssignDriver(e) {
+      e.preventDefault();
+      const orderId = document.getElementById('assignOrderId').value;
+      const driverId = document.getElementById('selectAssignDriver').value;
+
+      try {
+        const res = await fetch(`/api/orders/${orderId}/assign-driver`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sopir_id: driverId })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert(`${data.pesan}\nTautan Konfirmasi Sopir: ${window.location.origin}${data.url_konfirmasi}`);
+          closeModal('modalAssignDriver');
+          loadOrders();
+        } else {
+          alert(data.pesan);
+        }
+      } catch (err) {
+        alert('Gagal menugaskan sopir.');
+      }
+    }
+
+    // Modal Verifikasi Identitas
+    function openVerifyIdModal(orderId) {
+      document.getElementById('verifOrderId').value = orderId;
+      openModal('modalVerifyId');
+    }
+
+    async function handleVerifyIdentity(e) {
+      e.preventDefault();
+      const orderId = document.getElementById('verifOrderId').value;
+      const payload = {
+        jenis_dokumen: document.getElementById('verifDocType').value,
+        nomor_dokumen: document.getElementById('verifDocNum').value,
+        status_verifikasi: document.getElementById('verifStatus').value,
+        catatan: document.getElementById('verifNotes').value
+      };
+
+      try {
+        const res = await fetch(`/api/orders/${orderId}/verify-identity`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        alert(data.pesan);
+        closeModal('modalVerifyId');
+        loadOrders();
+      } catch (err) {
+        alert('Gagal menyimpan verifikasi identitas.');
+      }
+    }
+
+    // ==========================================
+    // 3. ARMADA & DOKUMEN
+    // ==========================================
+    async function loadCars() {
+      try {
+        const res = await fetch('/api/cars');
+        const cars = await res.json();
+        document.getElementById('tableCarsBody').innerHTML = cars.map(c => `
+          <tr>
+            <td>#${c.id}</td>
+            <td><b>${c.nama}</b></td>
+            <td>${c.nama_kategori || '-'}</td>
+            <td><code>${c.nomor_polisi}</code></td>
+            <td>${c.transmisi} · ${c.kapasitas} Kursi</td>
+            <td><b>${formatRp(c.tarif_per_hari)}</b></td>
+            <td>
+              <span class="status-badge ${c.status==='tersedia'?'bg-terkonfirmasi':(c.status==='disewa'?'bg-berjalan':'bg-ditolak')}">
+                ${c.status}
+              </span>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {}
+    }
+
+    async function loadDocs() {
+      try {
+        const res = await fetch('/api/documents');
+        const docs = await res.json();
+        document.getElementById('tableDocsBody').innerHTML = docs.map(d => {
+          const sisa = d.sisa_hari;
+          const statusBadge = sisa < 14 
+            ? `<span class="status-badge bg-ditolak">${sisa} hari (Darurat)</span>`
+            : (sisa < 30 ? `<span class="status-badge bg-menunggu_pemeriksaan">${sisa} hari (Mendekati)</span>` : `<span class="status-badge bg-terkonfirmasi">${sisa} hari (Aman)</span>`);
+
+          return `
+            <tr>
+              <td><b>${d.nama_mobil}</b> (<code>${d.nomor_polisi}</code>)</td>
+              <td>${d.jenis_dokumen}</td>
+              <td>${d.nomor_dokumen || '-'}</td>
+              <td>${d.tanggal_berlaku}</td>
+              <td>${statusBadge}</td>
+              <td>${d.catatan || '-'}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (e) {}
+    }
+
+    // ==========================================
+    // 4. SOPIR
+    // ==========================================
+    async function loadDrivers() {
+      try {
+        const res = await fetch('/api/drivers');
+        const drivers = await res.json();
+        document.getElementById('tableDriversBody').innerHTML = drivers.map(d => `
+          <tr>
+            <td>#${d.id}</td>
+            <td><b>${d.nama}</b></td>
+            <td>${d.nomor_wa}</td>
+            <td>${formatRp(d.tarif_per_hari)}</td>
+            <td>
+              <span class="status-badge ${d.status==='tersedia'?'bg-terkonfirmasi':'bg-menunggu_pemeriksaan'}">
+                ${d.status}
+              </span>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {}
+    }
+
+    // ==========================================
+    // 5. PENGEMBALIAN & CHECK-IN
+    // ==========================================
+    async function prepareReturnForm() {
+      try {
+        const res = await fetch('/api/orders?status=berjalan');
+        const orders = await res.json();
+        const sel = document.getElementById('returnOrderId');
+        document.getElementById('returnDate').value = new Date().toISOString().slice(0, 10);
+
+        if (orders.length === 0) {
+          sel.innerHTML = '<option value="">Tidak ada order berstatus "berjalan"</option>';
+        } else {
+          sel.innerHTML = orders.map(o => `<option value="${o.id}">${o.kode_booking} - ${o.nama_customer} (${o.nama_mobil})</option>`).join('');
+        }
+        calcPenaltyPreview();
+      } catch (e) {}
+    }
+
+    function calcPenaltyPreview() {
+      const lateHours = parseFloat(document.getElementById('returnLateHours').value) || 0;
+      const latePenalty = lateHours * 50000; // Contoh denda Rp 50rb per jam
+      const dmgPenalty = parseFloat(document.getElementById('returnDmgPenalty').value) || 0;
+      const extraFee = parseFloat(document.getElementById('returnExtraFee').value) || 0;
+      const total = latePenalty + dmgPenalty + extraFee;
+
+      document.getElementById('previewTotalPenalty').textContent = formatRp(total);
+    }
+
+    async function handleReturnCar(e) {
+      e.preventDefault();
+      const orderId = document.getElementById('returnOrderId').value;
+      if (!orderId) return alert('Pilih pemesanan terlebih dahulu.');
+
+      const lateHours = parseFloat(document.getElementById('returnLateHours').value) || 0;
+      const payload = {
+        pemesanan_id: orderId,
+        tanggal_kembali: document.getElementById('returnDate').value,
+        odometer_akhir: document.getElementById('returnOdo').value,
+        kondisi_bbm: document.getElementById('returnFuel').value,
+        jam_terlambat: lateHours,
+        denda_keterlambatan: lateHours * 50000,
+        denda_kerusakan: parseFloat(document.getElementById('returnDmgPenalty').value) || 0,
+        biaya_tambahan_lain: parseFloat(document.getElementById('returnExtraFee').value) || 0,
+        catatan_kondisi: document.getElementById('returnNotes').value
+      };
+
+      try {
+        const res = await fetch('/api/returns', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        alert(d.pesan);
+        switchTab('orders');
+      } catch (err) {
+        alert('Gagal memproses pengembalian.');
+      }
+    }
+
+    // ==========================================
+    // 6. KEUANGAN & PEMBAYARAN
+    // ==========================================
+    async function loadPayments() {
+      try {
+        const res = await fetch('/api/orders');
+        const orders = await res.json();
+        const payList = [];
+        for (const o of orders.slice(0, 15)) {
+          const detailRes = await fetch(`/api/orders/${o.id}`);
+          const d = await detailRes.json();
+          (d.pembayaran || []).forEach(p => payList.push({ ...p, kode_booking: o.kode_booking }));
+        }
+
+        const isAkuntansi = ['admin', 'akuntansi'].includes(currentUser.role);
+        document.getElementById('tablePaymentsBody').innerHTML = payList.map(p => `
+          <tr>
+            <td><b>${p.kode_booking}</b></td>
+            <td>${p.jenis_pembayaran}</td>
+            <td><b>${formatRp(p.nominal)}</b></td>
+            <td>${p.metode}</td>
+            <td>
+              <span class="status-badge ${p.status==='terverifikasi'?'bg-terkonfirmasi':'bg-menunggu_pemeriksaan'}">
+                ${p.status}
+              </span>
+            </td>
+            <td>${p.ditandai_oleh || '-'}</td>
+            <td>${p.diverifikasi_oleh || '<i style="color:#94a3b8;">Menunggu Akuntansi</i>'}</td>
+            <td>
+              ${isAkuntansi && p.status === 'diterima' ? `
+                <button class="btn btn-success btn-sm" onclick="verifyPayment(${p.id})">Verifikasi Sah</button>
+              ` : '-'}
+            </td>
+          </tr>
+        `).join('') || '<tr><td colspan="8" style="text-align:center;">Belum ada pembayaran dicatat.</td></tr>';
+      } catch (e) {}
+    }
+
+    async function verifyPayment(paymentId) {
+      if (!confirm('Verifikasi pembayaran ini sebagai sah? Status order terkait akan otomatis terkonfirmasi.')) return;
+      try {
+        const res = await fetch(`/api/payments/${paymentId}/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'terverifikasi', catatan: 'Diverifikasi akuntansi bank' })
+        });
+        const d = await res.json();
+        alert(d.pesan);
+        loadPayments();
+      } catch (e) {
+        alert('Gagal verifikasi pembayaran.');
+      }
+    }
+
+    function openMarkPaymentModal() {
+      const sel = document.getElementById('payOrderId');
+      sel.innerHTML = allOrdersData.map(o => `<option value="${o.id}">${o.kode_booking} - ${o.nama_customer} (${formatRp(o.total_harga)})</option>`).join('');
+      openModal('modalMarkPayment');
+    }
+
+    async function handleMarkPayment(e) {
+      e.preventDefault();
+      const payload = {
+        pemesanan_id: document.getElementById('payOrderId').value,
+        jenis_pembayaran: document.getElementById('payType').value,
+        nominal: document.getElementById('payAmount').value,
+        metode: document.getElementById('payMethod').value,
+        catatan: document.getElementById('payNotes').value
+      };
+
+      try {
+        const res = await fetch('/api/payments/mark-received', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        alert(d.pesan);
+        closeModal('modalMarkPayment');
+        loadPayments();
+      } catch (e) {
+        alert('Gagal menandai pembayaran.');
+      }
+    }
+
+    async function loadCash() {
+      try {
+        const res = await fetch('/api/finances');
+        const list = await res.json();
+        document.getElementById('tableCashBody').innerHTML = list.map(c => `
+          <tr>
+            <td>${c.tanggal}</td>
+            <td>
+              <span class="status-badge ${c.jenis==='pemasukan'?'bg-terkonfirmasi':'bg-ditolak'}">${c.jenis}</span>
+            </td>
+            <td><b>${c.kategori}</b></td>
+            <td><b>${formatRp(c.nominal)}</b></td>
+            <td>${c.keterangan || '-'}</td>
+            <td>${c.dicatat_oleh}</td>
+          </tr>
+        `).join('') || '<tr><td colspan="6" style="text-align:center;">Belum ada catatan kas.</td></tr>';
+      } catch (e) {}
+    }
+
+    // ==========================================
+    // 7. PENGGAJIAN (PAYROLL)
+    // ==========================================
+    async function loadPayroll() {
+      try {
+        const res = await fetch('/api/payroll');
+        const list = await res.json();
+        const isAkuntansi = ['admin', 'akuntansi'].includes(currentUser.role);
+
+        document.getElementById('tablePayrollBody').innerHTML = list.map(g => `
+          <tr>
+            <td><b>${g.nama_penerima}</b></td>
+            <td>${g.role_penerima}</td>
+            <td>${g.periode}</td>
+            <td>${formatRp(g.gaji_pokok)}</td>
+            <td>+${formatRp(g.insentif + g.bonus_perjalanan)}</td>
+            <td>-${formatRp(g.potongan)}</td>
+            <td style="color:var(--primary); font-weight:700;">${formatRp(g.total_diterima)}</td>
+            <td>
+              <span class="status-badge ${g.status_bayar==='dibayar'?'bg-terkonfirmasi':'bg-menunggu_pemeriksaan'}">
+                ${g.status_bayar}
+              </span>
+            </td>
+            <td>
+              ${isAkuntansi && g.status_bayar === 'draft' ? `
+                <button class="btn btn-success btn-sm" onclick="payPayroll(${g.id})">Bayar Gaji</button>
+              ` : `
+                <button class="btn btn-outline btn-sm" onclick="printDoc('payroll', ${g.id})">Cetak Slip</button>
+              `}
+            </td>
+          </tr>
+        `).join('') || '<tr><td colspan="9" style="text-align:center;">Belum ada data slip gaji.</td></tr>';
+      } catch (e) {}
+    }
+
+    async function payPayroll(id) {
+      if (!confirm('Tandai gaji ini telah dibayar dan catat otomatis ke pengeluaran kas?')) return;
+      try {
+        const res = await fetch(`/api/payroll/${id}/pay`, { method: 'PUT' });
+        const d = await res.json();
+        alert(d.pesan);
+        loadPayroll();
+      } catch (e) {
+        alert('Gagal membayar gaji.');
+      }
+    }
+
+    // ==========================================
+    // 8. CUSTOMER & BLACKLIST
+    // ==========================================
+    async function loadCustomers() {
+      try {
+        const res = await fetch('/api/customers');
+        const list = await res.json();
+        document.getElementById('tableCustomersBody').innerHTML = list.map(c => `
+          <tr>
+            <td><b>${c.nama}</b></td>
+            <td>${c.nomor_wa}</td>
+            <td>${c.email || '-'}</td>
+            <td>${c.total_sewa} Kali</td>
+            <td>
+              <span class="status-badge ${c.status_blacklist?'bg-ditolak':'bg-terkonfirmasi'}">
+                ${c.status_blacklist ? 'BLACKLIST' : 'Normal'}
+              </span>
+            </td>
+            <td>${c.alasan_blacklist || '-'}</td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="toggleBlacklist(${c.id}, ${c.status_blacklist})">
+                ${c.status_blacklist ? 'Cabut Blacklist' : 'Set Blacklist'}
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {}
+    }
+
+    async function toggleBlacklist(custId, currentStatus) {
+      let reason = null;
+      if (!currentStatus) {
+        reason = prompt('Masukkan alasan memasukkan pelanggan ke daftar hitam (blacklist):');
+        if (!reason) return;
+      }
+      try {
+        const res = await fetch(`/api/customers/${custId}/blacklist`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status_blacklist: !currentStatus, alasan_blacklist: reason })
+        });
+        const d = await res.json();
+        alert(d.pesan);
+        loadCustomers();
+      } catch (e) {
+        alert('Gagal mengubah blacklist.');
+      }
+    }
+
+    // ==========================================
+    // 9. AUDIT LOG
+    // ==========================================
+    async function loadAuditLogs() {
+      try {
+        const res = await fetch('/api/audit-logs');
+        const logs = await res.json();
+        document.getElementById('tableAuditBody').innerHTML = logs.map(l => `
+          <tr>
+            <td><small>${l.created_at}</small></td>
+            <td><b>${l.username}</b></td>
+            <td><span class="role-badge role-${l.role}">${l.role}</span></td>
+            <td><code>${l.tindakan}</code></td>
+            <td>${l.tabel} #${l.record_id || '-'}</td>
+            <td><small style="color:var(--text-muted);">${l.data_sesudah || l.data_sebelum || '-'}</small></td>
+          </tr>
+        `).join('');
+      } catch (e) {}
+    }
+
+    // ==========================================
+    // 10. MANAJEMEN USER
+    // ==========================================
+    async function loadUsers() {
+      try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        document.getElementById('tableUsersBody').innerHTML = users.map(u => `
+          <tr>
+            <td><b>${u.username}</b></td>
+            <td>${u.nama}</td>
+            <td><span class="role-badge role-${u.role}">${u.role}</span></td>
+            <td><span class="status-badge ${u.status==='aktif'?'bg-terkonfirmasi':'bg-ditolak'}">${u.status}</span></td>
+            <td><small style="color:var(--text-muted);">ID: #${u.id}</small></td>
+          </tr>
+        `).join('');
+      } catch (e) {}
+    }
+
+    // Modal Helpers
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    // Cetak Dokumen (Invoice, Kuitansi, SPK)
+    function printDoc(type, customId = null) {
+      const orderId = customId || currentSelectedOrderId;
+      if (!orderId) return alert('Pilih pemesanan terlebih dahulu.');
+      window.open(`/cetak.html?type=${type}&id=${orderId}`, '_blank', 'width=800,height=900');
+    }
+  </script>
+</body>
+</html>

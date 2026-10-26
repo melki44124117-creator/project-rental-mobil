@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konfirmasi Tugas Sopir - RodaKita Rental</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 16px;
+      font-size: 14px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      padding: 30px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .info-list {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin: 20px 0;
+      text-align: left;
+      font-size: 13px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .btn-action {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      font-size: 14px;
+      margin-bottom: 10px;
+      transition: opacity 0.2s;
+    }
+    .btn-action:hover { opacity: 0.9; }
+    .btn-accept { background: #10b981; color: white; }
+    .btn-reject { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="cardContainer">
+    <div style="color:#64748b;">Memeriksa token penugasan...</div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      const box = document.getElementById('cardContainer');
+
+      if (!token) {
+        box.innerHTML = `
+          <div style="color:#ef4444; font-size:40px; margin-bottom:10px;">✕</div>
+          <h3 style="margin-bottom:8px;">Tautan Tidak Valid</h3>
+          <p style="color:#64748b; font-size:13px;">Token konfirmasi sopir tidak ditemukan di URL.</p>
+        `;
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/public/driver-confirm/${token}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          box.innerHTML = `
+            <div style="color:#ef4444; font-size:40px; margin-bottom:10px;">✕</div>
+            <h3 style="margin-bottom:8px;">Tautan Tidak Berlaku</h3>
+            <p style="color:#64748b; font-size:13px;">${data.pesan || 'Token ini tidak ditemukan atau sudah kedaluwarsa.'}</p>
+          `;
+          return;
+        }
+
+        // Jika sudah pernah dijawab
+        if (data.status_konfirmasi !== 'menunggu') {
+          const isAccepted = data.status_konfirmasi === 'diterima';
+          box.innerHTML = `
+            <div style="font-size:44px; margin-bottom:10px;">${isAccepted ? '✅' : '❌'}</div>
+            <h3 style="margin-bottom:6px;">Tugas Telah Anda ${isAccepted ? 'Terima' : 'Tolak'}</h3>
+            <p style="color:#64748b; font-size:13px; margin-bottom:16px;">Tautan ini adalah token sekali pakai (one-time token) dan sudah tercatat sebelumnya.</p>
+            <div class="info-list">
+              <div class="info-row"><span>Kode Pemesanan</span><b>${data.kode_booking}</b></div>
+              <div class="info-row"><span>Kendaraan</span><b>${data.nama_mobil} (${data.nomor_polisi})</b></div>
+              <div class="info-row"><span>Status Jawaban</span><b style="color:${isAccepted?'green':'red'};">${data.status_konfirmasi.toUpperCase()}</b></div>
+            </div>
+          `;
+          return;
+        }
+
+        // Tampilkan Form Jawaban Sopir
+        box.innerHTML = `
+          <div class="badge">PENUGASAN PERJALANAN</div>
+          <h2 style="font-size:20px; font-weight:800; margin-bottom:4px;">Halo, ${data.nama_sopir}</h2>
+          <p style="color:#64748b; font-size:13px;">Anda mendapatkan penugasan mengemudi dari RodaKita Rental Mobil.</p>
+
+          <div class="info-list">
+            <div class="info-row"><span>Kode Booking</span><b>${data.kode_booking}</b></div>
+            <div class="info-row"><span>Unit Mobil</span><b>${data.nama_mobil} (${data.nomor_polisi})</b></div>
+            <div class="info-row"><span>Jadwal Tugas</span><b>${data.tanggal_mulai} s/d ${data.tanggal_selesai}</b></div>
+            <div class="info-row"><span>Pelanggan</span><b>${data.nama_customer}</b></div>
+            <div class="info-row"><span>Tujuan</span><b>${data.tujuan || '-'}</b></div>
+            <div class="info-row"><span>Lokasi Jemput</span><b>${data.lokasi_jemput || 'Kantor Rental'}</b></div>
+          </div>
+
+          <p style="font-size:12px; color:#64748b; margin-bottom:16px;">
+            Mohon tentukan ketersediaan Anda sekarang. Token ini berlaku terbatas dan hanya dapat ditekan sekali.
+          </p>
+
+          <button class="btn-action btn-accept" onclick="submitResponse('${token}', 'diterima')">
+            ✓ Terima Tugas Mengemudi Ini
+          </button>
+          <button class="btn-action btn-reject" onclick="submitResponse('${token}', 'ditolak')">
+            ✕ Maaf, Saya Berhalangan (Tolak)
+          </button>
+        `;
+
+      } catch (err) {
+        box.innerHTML = '<div style="color:red;">Gagal memuat status penugasan.</div>';
+      }
+    });
+
+    async function submitResponse(token, ans) {
+      if (!confirm(`Apakah Anda yakin ingin '${ans.toUpperCase()}' tugas perjalanan ini?`)) return;
+
+      try {
+        const res = await fetch(`/api/public/driver-confirm/${token}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jawaban: ans })
+        });
+        const data = await res.json();
+        alert(data.pesan);
+        window.location.reload();
+      } catch (err) {
+        alert('Gagal mengirim konfirmasi.');
+      }
+    }
+  </script>
+</body>
+</html>

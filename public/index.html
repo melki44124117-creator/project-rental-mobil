@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RodaKita Rental Mobil - Sewa Mobil Terpercaya & Cepat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --secondary: #0f172a;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --radius: 12px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Top Navigation */
+    header.navbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--secondary);
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), #38bdf8);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .brand span { color: var(--primary); }
+    nav.nav-links {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+    }
+    nav.nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    nav.nav-links a:hover { color: var(--primary); }
+    .btn-login-nav {
+      background: var(--secondary);
+      color: white !important;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px !important;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+    .btn-login-nav:hover { opacity: 0.9; }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0369a1 100%);
+      color: white;
+      padding: 56px 20px 84px;
+      text-align: center;
+      position: relative;
+    }
+    .hero-content {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.25;
+      margin-bottom: 14px;
+    }
+    .hero p {
+      font-size: 16px;
+      color: #cbd5e1;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    /* Floating Search Bar */
+    .search-card-wrapper {
+      max-width: 1040px;
+      margin: -50px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 20;
+    }
+    .search-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+    }
+    .search-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) 160px;
+      gap: 16px;
+      align-items: flex-end;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+    .form-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-control {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text);
+      background: #fdfdfd;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    .btn-search {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+      height: 44px;
+    }
+    .btn-search:hover { background: var(--primary-dark); }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+    .section-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--secondary);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    /* Category Filter Pills */
+    .filter-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pill:hover, .pill.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Car Cards Grid */
+    .car-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 50px;
+    }
+    .car-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .car-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    .car-header {
+      padding: 20px 20px 14px;
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      position: relative;
+    }
+    .car-category {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .car-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+    .car-plate {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: monospace;
+      font-weight: 600;
+    }
+    .car-body {
+      padding: 16px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .car-specs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      background: #f8fafc;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .car-facilities {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .car-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .car-price {
+      display: flex;
+      flex-direction: column;
+    }
+    .price-value {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .price-unit {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .btn-book {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-book:hover { background: var(--primary); }
+    .badge-unavailable {
+      background: #fee2e2;
+      color: var(--danger);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    /* Tracking & Rules Section */
+    .split-sections {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      margin-top: 20px;
+    }
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .timeline {
+      margin-top: 20px;
+      position: relative;
+      padding-left: 20px;
+      border-left: 2px solid var(--border);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -27px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 2px solid white;
+    }
+    .timeline-item.active::before {
+      background: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    .timeline-item.done::before {
+      background: var(--success);
+    }
+    .timeline-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .timeline-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Rules Grid */
+    .rule-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+    .rule-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .rule-text h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .rule-text p { font-size: 13px; color: var(--text-muted); }
+
+    /* Modal Wizard */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal {
+      background: var(--surface);
+      border-radius: 16px;
+      max-width: 620px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      padding: 28px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .modal-step-indicator {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .step-pill {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--border);
+    }
+    .step-pill.active { background: var(--primary); }
+    .step-pill.done { background: var(--success); }
+
+    .summary-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .summary-row:last-child {
+      border-bottom: none;
+      padding-top: 10px;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--primary);
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .btn-outline {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+    }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-wa {
+      background: #25d366;
+      color: white;
+      text-decoration: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    footer {
+      background: var(--secondary);
+      color: #94a3b8;
+      padding: 40px 20px;
+      font-size: 13px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    footer a { color: #cbd5e1; text-decoration: none; }
+    footer a:hover { color: white; }
+
+    @media (max-width: 768px) {
+      .split-sections { grid-template-columns: 1fr; }
+      .search-form { grid-template-columns: 1fr; }
+      nav.nav-links a:not(.btn-login-nav) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand">
+        <div class="brand-logo">R</div>
+        <span>RodaKita</span> Rental
+      </a>
+      <nav class="nav-links">
+        <a href="#katalog">Katalog Mobil</a>
+        <a href="#cara-pesan">Aturan Sewa</a>
+        <a href="#lacak">Lacak & Batal Order</a>
+        <a href="/admin.html" class="btn-login-nav">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Dashboard Pegawai
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">SISTEM PENYEWAAN RESMI BERBASIS WEB (v1.1)</div>
+      <h1>Sewa Mobil Terpercaya Tanpa Repot Bikin Akun</h1>
+      <p>Pilih mobil idaman, tentukan jadwal dengan/tanpa sopir, dan lacak status pesanan secara transparan langsung via WhatsApp.</p>
+    </div>
+  </section>
+
+  <!-- Floating Search & Filter Bar -->
+  <div class="search-card-wrapper">
+    <div class="search-card">
+      <form id="searchForm" class="search-form">
+        <div class="form-group">
+          <label>Tanggal Ambil</label>
+          <input type="date" id="inputStart" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Tanggal Kembali</label>
+          <input type="date" id="inputEnd" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Opsi Sopir</label>
+          <select id="inputDriver" class="form-control">
+            <option value="0">Lepas Kunci (Tanpa Sopir)</option>
+            <option value="1">Dengan Sopir (+Rp 150rb/hari)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Cek Jadwal
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Content: Catalog & Booking -->
+  <main class="container">
+    <div id="katalog">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+        <div>
+          <h2 class="section-title">Armada Kendaraan Tersedia</h2>
+          <p class="section-subtitle">Semua armada terawat, bersih, ber-AC dingin, dan dilengkapi asuransi resmi.</p>
+        </div>
+        <div id="categoryFilter" class="filter-pills">
+          <button class="pill active" data-cat="all">Semua Kategori</button>
+        </div>
+      </div>
+
+      <!-- Cars Grid -->
+      <div id="carsGrid" class="car-grid">
+        <div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">
+          Memuat data armada dari server...
+        </div>
+      </div>
+    </div>
+
+    <!-- Tracking Order & Rental Rules -->
+    <div class="split-sections" id="lacak">
+      <!-- Panel 1: Lacak Status & Pembatalan -->
+      <div class="panel-card">
+        <h3 class="section-title" style="font-size:20px;">Lacak Pesanan & Status Order</h3>
+        <p class="section-subtitle">Masukkan kode booking dan nomor WhatsApp yang digunakan saat pemesanan.</p>
+
+        <form id="trackForm" style="display:grid; grid-template-columns: 1fr 1fr auto; gap:10px; margin-bottom:16px;">
+          <input type="text" id="trackCode" class="form-control" placeholder="Contoh: BK-0142" required style="text-transform:uppercase;">
+          <input type="tel" id="trackPhone" class="form-control" placeholder="No. WA (0812...)" required>
+          <button type="submit" class="btn-search" style="padding:10px 18px;">Lacak</button>
+        </form>
+        <small style="color:var(--text-muted); display:block; margin-bottom:14px;">Contoh coba: Kode <b>BK-0142</b> dengan nomor <b>081234560005</b>.</small>
+
+        <div id="trackResult" style="display:none;"></div>
+      </div>
+
+      <!-- Panel 2: Aturan Sewa Bab III Proposal -->
+      <div class="panel-card" id="cara-pesan">
+        <h3 class="section-title" style="font-size:20px;">Aturan Sewa & Pembayaran (Bab III)</h3>
+        <p class="section-subtitle">Ketentuan operasional untuk kenyamanan dan keamanan bersama.</p>
+
+        <div class="rule-item">
+          <div class="rule-icon">1</div>
+          <div class="rule-text">
+            <h4>Alur Verifikasi Bertahap</h4>
+            <p>Order masuk berstatus <i>Menunggu Pemeriksaan</i>. Staff akan mengecek fisik unit & menghubungi Anda lewat WhatsApp sebelum disetujui.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-icon">2</div>
+          <div class="rule-text">
+            <h4>Uang Muka (DP) & Pelunasan</h4>
+            <p>Pemesanan terkonfirmasi sah setelah DP minimal 50% diverifikasi oleh Akuntansi. Sisa pembayaran dilunasi saat serah kunci.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-icon">3</div>
+          <div class="rule-text">
+            <h4>Perlindungan Data Pribadi (UU PDP)</h4>
+            <p>Data KTP dan SIM hanya dipakai untuk verifikasi identitas serah kunci dan disimpan dengan protokol keamanan tertutup.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-icon">4</div>
+          <div class="rule-text">
+            <h4>Batas Kedaluwarsa 24 Jam</h4>
+            <p>Order yang tidak ditindaklanjuti atau tanpa konfirmasi DP dalam 24 jam akan otomatis dibatalkan oleh sistem.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Booking Form (Multi-Step Wizard) -->
+  <div id="bookingModal" class="modal-backdrop">
+    <div class="modal">
+      <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+      <div class="modal-step-indicator">
+        <div id="stepPill1" class="step-pill active"></div>
+        <div id="stepPill2" class="step-pill"></div>
+        <div id="stepPill3" class="step-pill"></div>
+      </div>
+
+      <!-- Step 1: Ringkasan & Kalkulator Biaya Sesuai Rumus Bab III -->
+      <div id="step1">
+        <h3 style="margin-bottom:4px;" id="modalCarName">Toyota Avanza</h3>
+        <p style="color:var(--text-muted); font-size:13px; margin-bottom:16px;" id="modalCarDesc">7 Penumpang · Transmisi Manual</p>
+        
+        <div class="summary-box">
+          <div class="summary-row"><span>Tarif Sewa Mobil</span><span id="sumCarPrice">Rp 350.000 / hari</span></div>
+          <div class="summary-row"><span>Durasi Sewa</span><span id="sumDuration">3 Hari</span></div>
+          <div class="summary-row"><span>Biaya Sopir</span><span id="sumDriverFee">Rp 0 (Lepas Kunci)</span></div>
+          <div class="summary-row"><span>Biaya Antar/Jemput</span><span>Rp 0</span></div>
+          <div class="summary-row"><span>Diskon Promosi</span><span>-Rp 0</span></div>
+          <div class="summary-row"><span>Total Biaya Sewa</span><span id="sumGrandTotal">Rp 1.050.000</span></div>
+        </div>
+
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">
+          *Rumus perhitungan Bab III: <i>Total = (Tarif × Hari) + (Sopir × Hari) + Biaya Tambahan - Diskon</i>.
+        </p>
+
+        <div class="btn-group">
+          <button class="btn-outline" onclick="closeBookingModal()">Pilih Mobil Lain</button>
+          <button class="btn-primary" onclick="goToStep(2)">Lanjut: Isi Identitas Penyewa &rarr;</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Form Identitas & KTP/SIM -->
+      <div id="step2" style="display:none;">
+        <h3 style="margin-bottom:14px;">Identitas Penyewa</h3>
+        <form id="orderForm" onsubmit="submitBooking(event)">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div class="form-group">
+              <label>Nama Lengkap (Sesuai KTP)</label>
+              <input type="text" id="custName" class="form-control" required placeholder="Contoh: Budi Pratama">
+            </div>
+            <div class="form-group">
+              <label>Nomor WhatsApp Aktif</label>
+              <input type="tel" id="custPhone" class="form-control" required placeholder="081234567890">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div class="form-group">
+              <label>Alamat Email (Opsional)</label>
+              <input type="email" id="custEmail" class="form-control" placeholder="nama@email.com">
+            </div>
+            <div class="form-group">
+              <label>Nomor KTP / SIM</label>
+              <input type="text" id="custIdNumber" class="form-control" placeholder="16 Digit NIK / No. SIM">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>Alamat Domisili / Penjemputan</label>
+            <input type="text" id="custAddress" class="form-control" placeholder="Jl. Raya No. ..., Kota...">
+          </div>
+
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>Kota Tujuan Perjalanan</label>
+            <input type="text" id="custDestination" class="form-control" placeholder="Contoh: Bandung & Sekitarnya">
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label>Catatan Tambahan untuk Staff</label>
+            <textarea id="custNotes" class="form-control" rows="2" placeholder="Catatan jam penjemputan, perlengkapan anak, dll."></textarea>
+          </div>
+
+          <label style="display:flex; gap:8px; font-size:13px; align-items:flex-start; margin-bottom:20px; cursor:pointer;">
+            <input type="checkbox" id="agreePDP" required style="margin-top:3px;">
+            <span>Saya menyetujui penyimpanan dan verifikasi data identitas sesuai kebijakan perlindungan data pribadi untuk keperluan transaksi rental ini.</span>
+          </label>
+
+          <div class="btn-group">
+            <button type="button" class="btn-outline" onclick="goToStep(1)">&larr; Kembali</button>
+            <button type="submit" class="btn-primary" id="btnSubmitOrder">Kirim Pesanan Sekarang</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 3: Sukses & Info Pembayaran -->
+      <div id="step3" style="display:none; text-align:center;">
+        <div style="width:56px; height:56px; background:#dcfce7; color:var(--success); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:28px;">
+          ✓
+        </div>
+        <h3 style="margin-bottom:6px;">Pemesanan Berhasil Terkirim!</h3>
+        <p style="color:var(--text-muted); font-size:14px; margin-bottom:20px;">
+          Status saat ini: <b style="color:var(--accent);">Menunggu Pemeriksaan</b>. Tim kami segera mengecek ketersediaan fisik armada.
+        </p>
+
+        <div class="summary-box" style="text-align:left;">
+          <div class="summary-row"><span>Kode Booking</span><b id="resBookingCode" style="color:var(--primary); font-size:16px;">BK-XXXX</b></div>
+          <div class="summary-row"><span>Total Biaya</span><span id="resTotal">Rp 0</span></div>
+          <div class="summary-row"><span>Minimal DP (50%)</span><b id="resDP">Rp 0</b></div>
+          <div class="summary-row"><span>Batas Waktu Konfirmasi</span><span id="resExpiry">-</span></div>
+        </div>
+
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">
+          Silakan konfirmasi langsung atau kirim bukti bayar DP ke Admin via WhatsApp untuk mempercepat proses persetujuan.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a id="btnWhatsAppConfirm" href="#" target="_blank" class="btn-wa">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+            Hubungi Staff via WhatsApp
+          </a>
+          <button class="btn-outline" onclick="closeBookingModal()">Selesai & Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div style="max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      <div>
+        <strong>RodaKita Rental Mobil</strong> — Sistem Informasi Penyewaan Mobil Berbasis Web (Versi 1.1)
+        <br><small>Menyatukan operasional, penjadwalan armada, konfirmasi bertoken, dan akuntansi terpadu.</small>
+      </div>
+      <div>
+        <a href="/admin.html">Dashboard Internal Pegawai</a> &nbsp;|&nbsp;
+        <a href="/progres-apk.html">Progres Tim APK</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Client-side Logic Script -->
+  <script>
+    let allCars = [];
+    let selectedCar = null;
+    let searchCriteria = {
+      start: '',
+      end: '',
+      duration: 3,
+      driver: 0
+    };
+
+    // Format mata uang Rupiah
+    const formatRp = (num) => 'Rp ' + Math.round(num).toLocaleString('id-ID');
+
+    // Inisialisasi tanggal default
+    window.addEventListener('DOMContentLoaded', () => {
+      const today = new Date();
+      const start = new Date(today);
+      start.setDate(today.getDate() + 1);
+      const end = new Date(today);
+      end.setDate(today.getDate() + 4);
+
+      document.getElementById('inputStart').value = start.toISOString().slice(0, 10);
+      document.getElementById('inputEnd').value = end.toISOString().slice(0, 10);
+
+      loadCategories();
+      executeSearch();
+    });
+
+    // Ambil Kategori Mobil
+    async function loadCategories() {
+      try {
+        const res = await fetch('/api/public/categories');
+        const cats = await res.json();
+        const container = document.getElementById('categoryFilter');
+        cats.forEach(c => {
+          const btn = document.createElement('button');
+          btn.className = 'pill';
+          btn.textContent = c.nama_kategori;
+          btn.dataset.cat = c.id;
+          btn.onclick = () => filterByCategory(c.id, btn);
+          container.appendChild(btn);
+        });
+      } catch (err) {
+        console.error('Error load categories:', err);
+      }
+    }
+
+    // Filter kategori
+    function filterByCategory(catId, btnElement) {
+      document.querySelectorAll('#categoryFilter .pill').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+      renderCars(catId === 'all' ? allCars : allCars.filter(c => c.kategori_id == catId));
+    }
+
+    // Form Pencarian Tanggal
+    document.getElementById('searchForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      executeSearch();
+    });
+
+    async function executeSearch() {
+      const start = document.getElementById('inputStart').value;
+      const end = document.getElementById('inputEnd').value;
+      const driver = parseInt(document.getElementById('inputDriver').value) || 0;
+
+      if (!start || !end) return alert('Silakan tentukan tanggal sewa.');
+      const d1 = new Date(start);
+      const d2 = new Date(end);
+      if (d2 <= d1) return alert('Tanggal kembali harus setelah tanggal ambil.');
+
+      const duration = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+      searchCriteria = { start, end, duration, driver };
+
+      const grid = document.getElementById('carsGrid');
+      grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Memeriksa jadwal armada...</div>';
+
+      try {
+        const res = await fetch(`/api/public/cars?start=${start}&end=${end}`);
+        allCars = await res.json();
+        renderCars(allCars);
+      } catch (err) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:red;">Gagal menghubungi server.</div>';
+      }
+    }
+
+    // Render Kartu Mobil
+    function renderCars(cars) {
+      const grid = document.getElementById('carsGrid');
+      if (cars.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Tidak ada armada yang sesuai dengan pencarian.</div>';
+        return;
+      }
+
+      grid.innerHTML = cars.map(car => {
+        const isAvail = car.tersedia;
+        const driverFee = searchCriteria.driver === 1 ? 150000 : 0;
+        const totalPerDay = car.tarif_per_hari + driverFee;
+        const grandTotal = totalPerDay * searchCriteria.duration;
+
+        return `
+          <div class="car-card">
+            <div class="car-header">
+              <span class="car-category">${car.nama_kategori || 'Mobil Rental'}</span>
+              <div class="car-name">${car.nama}</div>
+              <div class="car-plate">${car.nomor_polisi}</div>
+            </div>
+            <div class="car-body">
+              <div class="car-specs">
+                <div>👥 ${car.kapasitas} Kursi</div>
+                <div>⚙️ ${car.transmisi}</div>
+                <div>⛽ Bensin</div>
+                <div>🛡️ Asuransi Resmi</div>
+              </div>
+              <div class="car-facilities">
+                <b>Fasilitas:</b> ${car.fasilitas || 'Standar rental, AC, Audio'}
+              </div>
+            </div>
+            <div class="car-footer">
+              <div class="car-price">
+                <span class="price-value">${formatRp(car.tarif_per_hari)}</span>
+                <span class="price-unit">per hari ${searchCriteria.driver ? '(+sopir)' : '(lepas kunci)'}</span>
+              </div>
+              ${isAvail ? `
+                <button class="btn-book" onclick="openBookingModal(${car.id})">Booking</button>
+              ` : `
+                <span class="badge-unavailable">Sudah Terisi</span>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Buka Modal Booking
+    function openBookingModal(carId) {
+      selectedCar = allCars.find(c => c.id === carId);
+      if (!selectedCar) return;
+
+      document.getElementById('modalCarName').textContent = selectedCar.nama;
+      document.getElementById('modalCarDesc').textContent = `${selectedCar.kapasitas} Penumpang · Transmisi ${selectedCar.transmisi} · ${selectedCar.nomor_polisi}`;
+
+      const carPriceTotal = selectedCar.tarif_per_hari * searchCriteria.duration;
+      const driverFeeTotal = (searchCriteria.driver === 1 ? 150000 : 0) * searchCriteria.duration;
+      const grandTotal = carPriceTotal + driverFeeTotal;
+
+      document.getElementById('sumCarPrice').textContent = `${formatRp(selectedCar.tarif_per_hari)} / hari`;
+      document.getElementById('sumDuration').textContent = `${searchCriteria.duration} Hari (${searchCriteria.start} s/d ${searchCriteria.end})`;
+      document.getElementById('sumDriverFee').textContent = searchCriteria.driver === 1 
+        ? `${formatRp(driverFeeTotal)} (${searchCriteria.duration} hari)` 
+        : 'Rp 0 (Lepas Kunci)';
+      document.getElementById('sumGrandTotal').textContent = formatRp(grandTotal);
+
+      goToStep(1);
+      document.getElementById('bookingModal').classList.add('open');
+    }
+
+    function closeBookingModal() {
+      document.getElementById('bookingModal').classList.remove('open');
+    }
+
+    function goToStep(step) {
+      document.getElementById('step1').style.display = step === 1 ? 'block' : 'none';
+      document.getElementById('step2').style.display = step === 2 ? 'block' : 'none';
+      document.getElementById('step3').style.display = step === 3 ? 'block' : 'none';
+
+      document.getElementById('stepPill1').className = 'step-pill ' + (step >= 1 ? (step > 1 ? 'done' : 'active') : '');
+      document.getElementById('stepPill2').className = 'step-pill ' + (step >= 2 ? (step > 2 ? 'done' : 'active') : '');
+      document.getElementById('stepPill3').className = 'step-pill ' + (step === 3 ? 'done' : '');
+    }
+
+    // Submit Pemesanan ke Server
+    async function submitBooking(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmitOrder');
+      btn.disabled = true;
+      btn.textContent = 'Memproses Pesanan...';
+
+      const payload = {
+        mobil_id: selectedCar.id,
+        tanggal_mulai: searchCriteria.start,
+        tanggal_selesai: searchCriteria.end,
+        durasi_hari: searchCriteria.duration,
+        opsi_sopir: searchCriteria.driver,
+        nama: document.getElementById('custName').value.trim(),
+        nomor_wa: document.getElementById('custPhone').value.trim(),
+        email: document.getElementById('custEmail').value.trim(),
+        alamat: document.getElementById('custAddress').value.trim(),
+        tujuan: document.getElementById('custDestination').value.trim(),
+        catatan: document.getElementById('custNotes').value.trim(),
+        nomor_identitas: document.getElementById('custIdNumber').value.trim(),
+        jenis_dokumen: 'KTP'
+      };
+
+      try {
+        const res = await fetch('/api/public/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.pesan || 'Gagal memproses pemesanan.');
+          btn.disabled = false;
+          btn.textContent = 'Kirim Pesanan Sekarang';
+          return;
+        }
+
+        // Tampilkan hasil di Step 3
+        document.getElementById('resBookingCode').textContent = data.kode_booking;
+        document.getElementById('resTotal').textContent = formatRp(data.total_harga);
+        document.getElementById('resDP').textContent = formatRp(data.dp_minimal);
+        document.getElementById('resExpiry').textContent = new Date(data.batas_kedaluwarsa).toLocaleString('id-ID');
+
+        // Setup Link WhatsApp
+        const waText = encodeURIComponent(
+          `Halo RodaKita Rental, saya ingin konfirmasi pesanan dengan kode booking: ${data.kode_booking}\n` +
+          `Nama: ${payload.nama}\nMobil: ${selectedCar.nama}\nTanggal: ${payload.tanggal_mulai} s/d ${payload.tanggal_selesai}`
+        );
+        document.getElementById('btnWhatsAppConfirm').href = `https://wa.me/6281234567890?text=${waText}`;
+
+        goToStep(3);
+      } catch (err) {
+        alert('Terjadi kesalahan jaringan.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Kirim Pesanan Sekarang';
+      }
+    }
+
+    // Lacak Booking
+    document.getElementById('trackForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('trackCode').value.trim();
+      const phone = document.getElementById('trackPhone').value.trim();
+      const resultBox = document.getElementById('trackResult');
+
+      resultBox.style.display = 'block';
+      resultBox.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">Mencari data booking...</p>';
+
+      try {
+        const res = await fetch(`/api/public/track?code=${encodeURIComponent(code)}&wa=${encodeURIComponent(phone)}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          resultBox.innerHTML = `<div style="background:#fee2e2; color:var(--danger); padding:12px; border-radius:8px; font-size:13px;">${data.pesan}</div>`;
+          return;
+        }
+
+        const o = data.order;
+        const totalPaid = o.total_terbayar || 0;
+        const sisa = Math.max(0, o.total_harga - totalPaid);
+
+        const statusMap = {
+          'menunggu_pemeriksaan': { label: 'Menunggu Pemeriksaan Staff', color: '#f59e0b', step: 1 },
+          'menunggu_persetujuan': { label: 'Menunggu Persetujuan / DP', color: '#3b82f6', step: 2 },
+          'terkonfirmasi': { label: 'Terkonfirmasi (DP Diterima)', color: '#10b981', step: 3 },
+          'berjalan': { label: 'Sewa Sedang Berjalan', color: '#6366f1', step: 4 },
+          'selesai': { label: 'Selesai & Dikembalikan', color: '#059669', step: 5 },
+          'ditolak': { label: 'Ditolak (Armada Tidak Tersedia)', color: '#ef4444', step: 0 },
+          'kedaluwarsa': { label: 'Kedaluwarsa (Lewat 24 Jam)', color: '#6b7280', step: 0 },
+          'dibatalkan': { label: 'Dibatalkan', color: '#dc2626', step: 0 }
+        };
+
+        const curStatus = statusMap[o.status] || { label: o.status, color: '#333', step: 1 };
+
+        resultBox.innerHTML = `
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:16px; margin-top:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span style="font-size:13px; color:var(--text-muted);">Kode: <b>${o.kode_booking}</b></span>
+              <span style="background:${curStatus.color}22; color:${curStatus.color}; font-weight:700; font-size:12px; padding:4px 10px; border-radius:999px;">
+                ${curStatus.label}
+              </span>
+            </div>
+            <div style="font-size:15px; font-weight:700; color:var(--secondary);">${o.nama_mobil} (${o.nomor_polisi})</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
+              Jadwal: ${o.tanggal_mulai} s/d ${o.tanggal_selesai} (${o.durasi_hari} Hari) · ${o.opsi_sopir ? 'Dengan Sopir (' + o.nama_sopir + ')' : 'Lepas Kunci'}
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; background:white; padding:10px; border-radius:8px; font-size:12px; margin-bottom:14px; border:1px solid var(--border);">
+              <div>Total Tagihan<br><b>${formatRp(o.total_harga)}</b></div>
+              <div>Sudah Bayar<br><b style="color:var(--success);">${formatRp(totalPaid)}</b></div>
+              <div>Sisa Pelunasan<br><b style="color:var(--danger);">${formatRp(sisa)}</b></div>
+            </div>
+
+            <!-- Timeline Status Sesuai Bab IV -->
+            <div class="timeline">
+              <div class="timeline-item ${curStatus.step >= 1 ? 'done' : ''}">
+                <div class="timeline-title">1. Menunggu Pemeriksaan</div>
+                <div class="timeline-desc">Staff mengecek unit & jadwal bentrok di database.</div>
+              </div>
+              <div class="timeline-item ${curStatus.step >= 2 ? 'done' : (curStatus.step === 1 ? 'active' : '')}">
+                <div class="timeline-title">2. Menunggu Persetujuan & DP</div>
+                <div class="timeline-desc">Customer menyetujui jadwal dan membayar DP sewa minimal 50%.</div>
+              </div>
+              <div class="timeline-item ${curStatus.step >= 3 ? 'done' : (curStatus.step === 2 ? 'active' : '')}">
+                <div class="timeline-title">3. Terkonfirmasi</div>
+                <div class="timeline-desc">DP diverifikasi Akuntansi. Mobil dan sopir siap ditugaskan.</div>
+              </div>
+              <div class="timeline-item ${curStatus.step >= 4 ? 'done' : (curStatus.step === 3 ? 'active' : '')}">
+                <div class="timeline-title">4. Berjalan</div>
+                <div class="timeline-desc">Mobil diserahterimakan dan masa sewa aktif.</div>
+              </div>
+              <div class="timeline-item ${curStatus.step >= 5 ? 'done' : ''}">
+                <div class="timeline-title">5. Selesai</div>
+                <div class="timeline-desc">Armada dikembalikan dan dicek oleh staff.</div>
+              </div>
+            </div>
+
+            ${['menunggu_pemeriksaan', 'menunggu_persetujuan'].includes(o.status) ? `
+              <div style="margin-top:14px; text-align:right;">
+                <button onclick="requestCancelOrder('${o.kode_booking}', '${phone}')" style="background:none; border:1px solid var(--danger); color:var(--danger); padding:6px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-weight:600;">
+                  Batalkan Pesanan Ini
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      } catch (err) {
+        resultBox.innerHTML = '<div style="color:red; font-size:13px;">Gagal memuat status pesanan.</div>';
+      }
+    });
+
+    // Permintaan Pembatalan
+    async function requestCancelOrder(code, phone) {
+      const reason = prompt('Masukkan alasan pembatalan:');
+      if (!reason) return;
+
+      try {
+        const res = await fetch('/api/public/orders/cancel', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ kode_booking: code, nomor_wa: phone, alasan: reason })
+        });
+        const data = await res.json();
+        alert(data.pesan);
+        document.getElementById('trackForm').dispatchEvent(new Event('submit'));
+      } catch (err) {
+        alert('Gagal memproses pembatalan.');
+      }
+    }
+  </script>
+</body>
+</html>
